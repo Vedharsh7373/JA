@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teacher Entry Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body{font-family:'Roboto',Arial,sans-serif;margin:0;background:#fdfdfd;color:#b30000}
+header{background:#b30000;color:white;padding:15px 30px;display:flex;align-items:center;justify-content:space-between}
+#logo1{height:150px;width:150px}
+#logo2{height:70px;width:300px}
+h1{font-size:26px;margin:0;text-align:center;flex:1}
+.container{max-width:800px;margin:30px auto;background:white;padding:30px;border:2px solid #b30000;border-radius:12px}
+label{font-weight:bold;color:#b30000}
+form{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #b30000;box-sizing:border-box}
+button{grid-column:span 2;padding:12px;background:#b30000;border:none;border-radius:8px;color:white;font-size:16px;cursor:pointer}
+.entry{margin-top:20px;padding:15px;border:1px solid #b30000;border-radius:8px;background:#fff5f5}
+</style>
+</head>
+<body>
+<header>
+<a href="https://web-bros-fqzz.b12sites.com/" target="_blank"><img src="twb.png" id="logo1"></a>
+<h1>Teacher Entry Portal</h1>
+<a href="https://johnsacademy.in/" target="_blank"><img src="ja.png" id="logo2"></a>
+</header>
+<div class="container">
+<form id="entryForm">
+<div><label for="teacher">Teacher:</label>
+<select id="teacher" required>
+<option value="" disabled selected>Select Teacher</option>
+<option value="A">Teacher A</option>
+<option value="B">Teacher B</option>
+<option value="C">Teacher C</option>
+<option value="D">Teacher D</option>
+</select></div>
+<div><label for="student">Student:</label><select id="student" required></select></div>
+<div><label for="subject">Subject:</label><select id="subject" required></select></div>
+<div><label for="topicNo">Topic No.:</label><input type="number" id="topicNo" required></div>
+<div><label for="topicName">Topic Name:</label><input type="text" id="topicName" required></div>
+<div style="grid-column:span 2;"><label for="workDone">Work Done:</label><textarea id="workDone" rows="4" required></textarea></div>
+<button type="submit">Submit</button>
+</form>
+<div id="output" class="entry"></div>
+</div>
+<script>
+const teacherStudentMap={A:{a1:["Math","English"],a2:["Science","History"]},B:{b1:["Biology","Chemistry"],b2:["Physics","Math"]},C:{c1:["Geography","Civics"],c2:["Math","English"]},D:{d1:["Economics","Business"],d2:["Accounting","Math"]}};
+const teacherSelect=document.getElementById("teacher"),studentSelect=document.getElementById("student"),subjectSelect=document.getElementById("subject"),form=document.getElementById("entryForm"),output=document.getElementById("output");
+teacherSelect.addEventListener("change",()=>{
+let students=teacherStudentMap[teacherSelect.value];
+studentSelect.innerHTML=`<option value="" disabled selected>Select Student</option>`;
+for(let s in students){studentSelect.innerHTML+=`<option value="${s}">${s}</option>`}
+subjectSelect.innerHTML=`<option value="" disabled selected>Select Subject</option>`;
+});
+studentSelect.addEventListener("change",()=>{
+let subjects=teacherStudentMap[teacherSelect.value][studentSelect.value];
+subjectSelect.innerHTML=`<option value="" disabled selected>Select Subject</option>`;
+subjects.forEach(sub=>{subjectSelect.innerHTML+=`<option value="${sub}">${sub}</option>`})
+});
+form.addEventListener("submit",e=>{
+e.preventDefault();
+let today=new Date().toISOString().split("T")[0];
+let entry={
+Date:today,
+Teacher:teacherSelect.value,
+Student:studentSelect.value,
+Subject:subjectSelect.value,
+"Topic No.":document.getElementById("topicNo").value,
+"Topic Name":document.getElementById("topicName").value,
+"Work Done":document.getElementById("workDone").value
+};
+output.innerHTML=`<strong>Submission:</strong><br>
+Teacher: ${entry.Teacher}<br>
+Student: ${entry.Student}<br>
+Subject: ${entry.Subject}<br>
+Topic ${entry["Topic No."]}: ${entry["Topic Name"]}<br>
+Work Done: ${entry["Work Done"]}<br>
+Date: ${entry.Date}`;
+alert("submission complete!");
+form.reset();
+});
+</script>
+</body>
+</html>
