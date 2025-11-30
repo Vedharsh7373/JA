@@ -22,14 +22,14 @@ body {
 header {
   background: var(--main-red);
   color: var(--main-white);
-  padding: 24px 0 18px 0;
+  padding: 18px 0 18px 0;
   text-align: center;
   box-shadow: 0 8px 26px -12px rgba(0,0,0,0.5);
 }
 h1 {
   margin: 0;
   font-family: "Montserrat", Arial, sans-serif;
-  font-size: 2.6rem;
+  font-size: 2.3rem;
   letter-spacing: 1.5px;
   font-weight: 900;
 }
@@ -276,9 +276,10 @@ th {
 
 <footer style="margin-top:24px; text-align:center; padding:14px 8px; font-family:'Montserrat',Arial,sans-serif; font-size:0.9rem; color:#a00000;">
   <span style="margin-right:6px;">Made by</span>
-  <img src="https://raw.githubusercontent.com/Vedharsh7373/Student-information/main/Logo_2.png"
-       alt="WebBros Logo"
-       style="height:32px; vertical-align:middle; border-radius:4px;">
+  <a href="https://web-bros-fqzz.b12sites.com" target="_blank" rel="noopener noreferrer"
+     style="color:#e00000; font-weight:700; text-decoration:none;">
+    Web Bros
+  </a>
 </footer>
 
 <script>
@@ -288,10 +289,7 @@ const STORAGE_ACCEPT_KEY = "teacherPortalStorageAccepted";
 const SELECTED_TEACHER_KEY = "teacherPortalSelectedTeacher";
 const FOUR_MONTHS_MS = 1000 * 60 * 60 * 24 * 30 * 4;
 
-// Students taken exactly from your three screenshots.
-// Sheet with GEETHU in TEACHER column -> geethu.
-// Sheet with DIVYA in TEACHER column -> divya.
-// Sheet with no TEACHER column -> aishwarya. [attached_file:1][attached_file:2][attached_file:3]
+// Students from your three sheets: GEETHU, DIVYA, AISHWARYA. [attached_file:1][attached_file:2][attached_file:3]
 const TEACHERS_SEED = {
   geethu: {
     display: "GEETHU M'am",
@@ -763,5 +761,3 @@ document.getElementById("toggleView").addEventListener("click", function () {
 </script>
 </body>
 </html>
-
-
