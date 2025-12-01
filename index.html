@@ -7,10 +7,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --main-red: #e00000;
-  --main-darkred: #a00000;
-  --main-white: #ffffff;
-  --main-pale: #ffecec;
+  --main-red: red;
+  --main-darkred: darkred;
+  --main-white: white;
+  --main-pale: lavenderblush;
 }
 body {
   font-family: "Roboto", Arial, sans-serif;
@@ -196,7 +196,6 @@ th {
   <button id="toggleView" class="secondary">Optimize for Desktop</button>
 
   <form id="entryForm">
-    <!-- Hidden by JS; layout only -->
     <div>
       <label>Teacher:</label>
       <select id="teacher">
@@ -246,7 +245,6 @@ th {
   <div id="tableContainer"></div>
 </div>
 
-<!-- Student Modal -->
 <div class="modal" id="studentModal">
   <div class="modal-content">
     <span class="close" id="closeStudentModal">&times;</span>
@@ -259,7 +257,6 @@ th {
   </div>
 </div>
 
-<!-- Teacher Modal -->
 <div class="modal" id="teacherModal">
   <div class="modal-content">
     <span class="close" id="closeTeacherModal">&times;</span>
@@ -274,28 +271,25 @@ th {
   </div>
 </div>
 
-<footer style="margin-top:24px; text-align:center; padding:14px 8px; font-family:'Montserrat',Arial,sans-serif; font-size:0.9rem; color:#a00000;">
+<footer style="margin-top:24px; text-align:center; padding:14px 8px; font-family:'Montserrat',Arial,sans-serif; font-size:0.9rem; color:darkred;">
   <span style="margin-right:6px;">Made by</span>
   <a href="https://web-bros-fqzz.b12sites.com" target="_blank" rel="noopener noreferrer"
-     style="color:#e00000; font-weight:700; text-decoration:none;">
+     style="color:red; font-weight:700; text-decoration:none;">
     Web Bros
   </a>
 </footer>
 
-
 <script>
-// ====== CONFIG ======
 const STORAGE_KEY = "teacherPortalData_v2";
 const STORAGE_ACCEPT_KEY = "teacherPortalStorageAccepted";
 const SELECTED_TEACHER_KEY = "teacherPortalSelectedTeacher";
 const FOUR_MONTHS_MS = 1000 * 60 * 60 * 24 * 30 * 4;
 
-// Students from your three sheets: GEETHU, DIVYA, AISHWARYA. [attached_file:1][attached_file:2][attached_file:3]
 const TEACHERS_SEED = {
   geethu: {
     display: "GEETHU M'am",
     pin: "2834",
-    subjects: ["English", "SST"],
+    subjects: ["English", "SST", "Other"],
     students: [
       "ISHAN (ONLINE)",
       "JAI",
@@ -318,7 +312,7 @@ const TEACHERS_SEED = {
   divya: {
     display: "DIVYA M'am",
     pin: "7358",
-    subjects: ["Science,Other"],
+    subjects: ["Science", "Other"],
     students: [
       "MANASVI",
       "RISHAB",
@@ -346,7 +340,7 @@ const TEACHERS_SEED = {
   aishwarya: {
     display: "AISHWARYA M'am",
     pin: "9384",
-    subjects: ["Math,Other"],
+    subjects: ["Math", "Other"],
     students: [
       "ADVAITH",
       "SHRAVYA",
@@ -396,7 +390,6 @@ let teachers = {};
 let entries = [];
 let selectedTeacherId = null;
 
-// ====== STORAGE PERMISSION ======
 function ensureStoragePermission() {
   const accepted = localStorage.getItem(STORAGE_ACCEPT_KEY);
   if (!accepted) {
@@ -412,7 +405,6 @@ function ensureStoragePermission() {
   return true;
 }
 
-// ====== LOAD / SAVE WITH TTL ======
 function loadFromStorage() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -435,11 +427,11 @@ function loadFromStorage() {
     saveToStorage();
   }
 }
+
 function saveToStorage() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({ teachers, entries }));
 }
 
-// ====== FIRST VISIT: TEACHER SELECTION ======
 function showTeacherSelectPrompt() {
   let message = "Select your teacher by typing the number:\n";
   const ids = Object.keys(teachers);
@@ -455,6 +447,7 @@ function showTeacherSelectPrompt() {
   }
   return ids[idx];
 }
+
 function ensureSelectedTeacher() {
   let t = localStorage.getItem(SELECTED_TEACHER_KEY);
   if (t && teachers[t]) {
@@ -468,7 +461,6 @@ function ensureSelectedTeacher() {
   return true;
 }
 
-// ====== INITIAL SETUP ======
 window.addEventListener("load", function () {
   if (!ensureStoragePermission()) return;
   loadFromStorage();
@@ -477,7 +469,6 @@ window.addEventListener("load", function () {
   buildCalendarInterface();
 });
 
-// ====== FORM SETUP ======
 function setupFormForSelectedTeacher() {
   const teacher = teachers[selectedTeacherId];
   const teacherSelect = document.getElementById("teacher");
@@ -505,7 +496,6 @@ function setupFormForSelectedTeacher() {
   });
 }
 
-// ====== SUBMIT ENTRY ======
 document.getElementById("entryForm").addEventListener("submit", function (e) {
   e.preventDefault();
   if (!ensureStoragePermission()) return;
@@ -555,7 +545,6 @@ Work Done: ${workDone}`;
   setTimeout(() => output.style.display = "none", 5000);
 }
 
-// ====== ADD STUDENT ======
 document.getElementById("addStudentBtn").onclick = function() {
   let select = document.getElementById("newStudentTeacher");
   select.innerHTML = "";
@@ -567,9 +556,11 @@ document.getElementById("addStudentBtn").onclick = function() {
   });
   document.getElementById("studentModal").style.display = "block";
 };
+
 document.getElementById("closeStudentModal").onclick = function() {
   document.getElementById("studentModal").style.display = "none";
 };
+
 document.getElementById("saveStudentBtn").onclick = function() {
   let name = document.getElementById("newStudentName").value.trim();
   let tch = document.getElementById("newStudentTeacher").value;
@@ -583,13 +574,14 @@ document.getElementById("saveStudentBtn").onclick = function() {
   alert("Student added!");
 };
 
-// ====== ADD TEACHER ======
 document.getElementById("addTeacherBtn").onclick = function() {
   document.getElementById("teacherModal").style.display = "block";
 };
+
 document.getElementById("closeTeacherModal").onclick = function() {
   document.getElementById("teacherModal").style.display = "none";
 };
+
 document.getElementById("saveTeacherBtn").onclick = function() {
   let display = document.getElementById("newTeacherName").value.trim();
   let subjects = document.getElementById("newTeacherSubjects").value
@@ -606,7 +598,6 @@ document.getElementById("saveTeacherBtn").onclick = function() {
   alert("Teacher added!");
 };
 
-// ====== CLOSE MODALS ON BACKDROP CLICK ======
 window.onclick = function(ev) {
   if (ev.target === document.getElementById("studentModal"))
     document.getElementById("studentModal").style.display = "none";
@@ -614,7 +605,6 @@ window.onclick = function(ev) {
     document.getElementById("teacherModal").style.display = "none";
 };
 
-// ====== PIN + VIEW TODAY'S SUBMISSIONS ======
 document.getElementById("viewSubmissionsBtn").onclick = function() {
   const pin = document.getElementById("pin").value;
   const teacherKey = Object.keys(teachers).find(k => teachers[k].pin === pin);
@@ -655,7 +645,6 @@ function displayTable(list) {
   };
 }
 
-// ====== CALENDAR INTERFACE ======
 function buildCalendarInterface() {
   const container = document.getElementById("tableContainer");
   container.innerHTML = `
@@ -668,6 +657,7 @@ function buildCalendarInterface() {
   `;
   refreshCalendarView();
 }
+
 function refreshCalendarView() {
   if (!selectedTeacherId) return;
   const filtered = entries.filter(e => e.teacherId === selectedTeacherId);
@@ -707,6 +697,7 @@ function refreshCalendarView() {
     if (idx === monthKeys.length - 1) renderDaysForMonth(mk, monthMap[mk]);
   });
 }
+
 function renderDaysForMonth(monthKey, list) {
   const daysDiv = document.getElementById("dayList");
   const dayEntriesDiv = document.getElementById("dayEntries");
@@ -731,6 +722,7 @@ function renderDaysForMonth(monthKey, list) {
     if (idx === dayKeys.length - 1) renderEntriesForDay(dk, dayMap[dk]);
   });
 }
+
 function renderEntriesForDay(dateStr, list) {
   const dayEntriesDiv = document.getElementById("dayEntries");
   if (!list || list.length === 0) {
@@ -751,7 +743,6 @@ function renderEntriesForDay(dateStr, list) {
   dayEntriesDiv.innerHTML = html;
 }
 
-// ====== TOGGLE VIEW ======
 document.getElementById("toggleView").addEventListener("click", function () {
   const main = document.getElementById("mainContainer");
   main.classList.toggle("desktop");
@@ -762,5 +753,3 @@ document.getElementById("toggleView").addEventListener("click", function () {
 </script>
 </body>
 </html>
-
-
