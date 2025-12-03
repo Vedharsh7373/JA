@@ -631,44 +631,43 @@ function displayTable(list) {
   document.getElementById("tableContainer").innerHTML = html;
 
   document.getElementById('copyButton').onclick = function() {
-  const table = document.getElementById('submissionsTable');
-  const rows = table.querySelectorAll('tr');
-  let lines = [];
+    const table = document.getElementById('submissionsTable');
+    const rows = table.querySelectorAll('tr');
+    let lines = [];
 
-  // Build header line
-  let headerCells = rows[0].querySelectorAll('th, td');
-  let headerParts = [];
-  headerCells.forEach(cell => {
-    headerParts.push(cell.textContent.trim());
-  });
-  lines.push(headerParts.join(' | '));
-
-  // Build each data line
-  for (let i = 1; i < rows.length; i++) {
-    const cells = rows[i].querySelectorAll('td');
-    let parts = [];
-    cells.forEach(cell => {
-      parts.push(cell.textContent.trim());
+    // header
+    let headerCells = rows[0].querySelectorAll('th, td');
+    let headerParts = [];
+    headerCells.forEach(cell => {
+      headerParts.push(cell.textContent.trim());
     });
-    lines.push(parts.join(' | '));
-  }
+    lines.push(headerParts.join(' | '));
 
-  const markdownTable = lines.join('\n');
+    // data rows
+    for (let i = 1; i < rows.length; i++) {
+      const cells = rows[i].querySelectorAll('td');
+      let parts = [];
+      cells.forEach(cell => {
+        parts.push(cell.textContent.trim());
+      });
+      lines.push(parts.join(' | '));
+    }
 
-  navigator.clipboard.writeText(markdownTable).then(() => {
-    alert("Plain table copied!");
-  }).catch(() => {
-    // fallback
-    const textarea = document.createElement('textarea');
-    textarea.value = markdownTable;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    alert("Plain table copied!");
-  });
-};
+    const markdownTable = lines.join('\n');
 
+    navigator.clipboard.writeText(markdownTable).then(() => {
+      alert("Plain table copied!");
+    }).catch(() => {
+      const textarea = document.createElement('textarea');
+      textarea.value = markdownTable;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      alert("Plain table copied!");
+    });
+  };
+}  // <-- important closing brace for displayTable
 
 function buildCalendarInterface() {
   const container = document.getElementById("tableContainer");
@@ -723,60 +722,4 @@ function refreshCalendarView() {
   });
 }
 
-function renderDaysForMonth(monthKey, list) {
-  const daysDiv = document.getElementById("dayList");
-  const dayEntriesDiv = document.getElementById("dayEntries");
-  daysDiv.innerHTML = "Days: ";
-  dayEntriesDiv.innerHTML = "";
-
-  const dayMap = {};
-  list.forEach(e => {
-    if (!dayMap[e.date]) dayMap[e.date] = [];
-    dayMap[e.date].push(e);
-  });
-
-  const dayKeys = Object.keys(dayMap).sort();
-  dayKeys.forEach((dk, idx) => {
-    const d = new Date(dk);
-    const label = d.getDate();
-    const btn = document.createElement("button");
-    btn.textContent = label;
-    btn.className = "secondary";
-    btn.style.marginRight = "4px";
-    btn.onclick = function() { renderEntriesForDay(dk, dayMap[dk]); };
-    daysDiv.appendChild(btn);
-    if (idx === dayKeys.length - 1) renderEntriesForDay(dk, dayMap[dk]);
-  });
-}
-
-function renderEntriesForDay(dateStr, list) {
-  const dayEntriesDiv = document.getElementById("dayEntries");
-  if (!list || list.length === 0) {
-    dayEntriesDiv.innerHTML = "No entries.";
-    return;
-  }
-  let html = `<h4>Entries for ${dateStr}</h4><table><tr>
-<th>Student</th><th>Subject</th><th>Chapter</th><th>Work Done</th></tr>`;
-  list.forEach(r => {
-    html += `<tr>
-<td>${r.student}</td>
-<td>${r.subject}</td>
-<td>${r.chapter}</td>
-<td>${r.workDone}</td>
-</tr>`;
-  });
-  html += `</table>`;
-  dayEntriesDiv.innerHTML = html;
-}
-
-document.getElementById("toggleView").addEventListener("click", function () {
-  const main = document.getElementById("mainContainer");
-  main.classList.toggle("desktop");
-  document.getElementById("toggleView").textContent = main.classList.contains("desktop")
-    ? "Optimize for Mobile"
-    : "Optimize for Desktop";
-});
-</script>
-</body>
-</html>
-
+function
