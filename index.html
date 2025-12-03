@@ -631,20 +631,44 @@ function displayTable(list) {
   document.getElementById("tableContainer").innerHTML = html;
 
   document.getElementById('copyButton').onclick = function() {
-    let table = document.getElementById('submissionsTable');
-    let range = document.createRange();
-    range.selectNode(table);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-    try {
-      document.execCommand("copy");
-      alert("Table copied to clipboard!");
-    } catch (e) {
-      alert("Copy failed. Please copy manually.");
-    }
-    window.getSelection().removeAllRanges();
-  };
-}
+  const table = document.getElementById('submissionsTable');
+  const rows = table.querySelectorAll('tr');
+  let lines = [];
+
+  // Build header line
+  let headerCells = rows[0].querySelectorAll('th, td');
+  let headerParts = [];
+  headerCells.forEach(cell => {
+    headerParts.push(cell.textContent.trim());
+  });
+  lines.push(headerParts.join(' | '));
+
+  // Build each data line
+  for (let i = 1; i < rows.length; i++) {
+    const cells = rows[i].querySelectorAll('td');
+    let parts = [];
+    cells.forEach(cell => {
+      parts.push(cell.textContent.trim());
+    });
+    lines.push(parts.join(' | '));
+  }
+
+  const markdownTable = lines.join('\n');
+
+  navigator.clipboard.writeText(markdownTable).then(() => {
+    alert("Plain table copied!");
+  }).catch(() => {
+    // fallback
+    const textarea = document.createElement('textarea');
+    textarea.value = markdownTable;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    alert("Plain table copied!");
+  });
+};
+
 
 function buildCalendarInterface() {
   const container = document.getElementById("tableContainer");
@@ -755,3 +779,4 @@ document.getElementById("toggleView").addEventListener("click", function () {
 </script>
 </body>
 </html>
+
