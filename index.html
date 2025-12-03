@@ -629,6 +629,7 @@ function displayTable(list) {
   });
   html += `</table><button id='copyButton' class='secondary'>Copy Table</button>`;
   document.getElementById("tableContainer").innerHTML = html;
+
   document.getElementById('copyButton').onclick = function() {
     let table = document.getElementById('submissionsTable');
     let range = document.createRange();
@@ -698,25 +699,17 @@ function refreshCalendarView() {
   });
 }
 
-function renderEntriesForDay(dateStr, list) {
-const dayEntriesDiv = document.getElementById("dayEntries");
-if (!list || list.length === 0) {
-dayEntriesDiv.innerHTML = "No entries.";
-return;
-}
-let html = `<h4>Entries for ${dateStr}</h4><table><tr>
-<th>Student</th><th>Subject</th><th>Chapter</th><th>Work Done</th></tr>`;
-list.forEach(r => {
-html += `<tr>
-<td>${r.student}</td>
-<td>${r.subject}</td>
-<td>${r.chapter}</td>
-<td>${r.workDone}</td>
-</tr>`;
-});
-html += `</table>`;
-dayEntriesDiv.innerHTML = html;
-}
+function renderDaysForMonth(monthKey, list) {
+  const daysDiv = document.getElementById("dayList");
+  const dayEntriesDiv = document.getElementById("dayEntries");
+  daysDiv.innerHTML = "Days: ";
+  dayEntriesDiv.innerHTML = "";
+
+  const dayMap = {};
+  list.forEach(e => {
+    if (!dayMap[e.date]) dayMap[e.date] = [];
+    dayMap[e.date].push(e);
+  });
 
   const dayKeys = Object.keys(dayMap).sort();
   dayKeys.forEach((dk, idx) => {
@@ -762,4 +755,3 @@ document.getElementById("toggleView").addEventListener("click", function () {
 </script>
 </body>
 </html>
-
