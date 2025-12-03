@@ -698,17 +698,26 @@ function refreshCalendarView() {
   });
 }
 
-function renderDaysForMonth(monthKey, list) {
-  const daysDiv = document.getElementById("dayList");
-  const dayEntriesDiv = document.getElementById("dayEntries");
-  daysDiv.innerHTML = "Days: ";
-  dayEntriesDiv.innerHTML = "";
+function renderEntriesForDay(dateStr, list) {
+const dayEntriesDiv = document.getElementById("dayEntries");
+if (!list || list.length === 0) {
+dayEntriesDiv.innerHTML = "No entries.";
+return;
+}
+let html = `<h4>Entries for ${dateStr}</h4><table><tr>
+<th>Student</th><th>Subject</th><th>Chapter</th><th>Work Done</th></tr>`;
+list.forEach(r => {
+html += `<tr>
+<td>${r.student}</td>
+<td>${r.subject}</td>
+<td>${r.chapter}</td>
+<td>${r.workDone}</td>
+</tr>`;
+});
+html += `</table>`;
+dayEntriesDiv.innerHTML = html;
+}
 
-  const dayMap = {};
-  list.forEach(e => {
-    if (!dayMap[e.date]) dayMap[e.date] = [];
-    dayMap[e.date].push(e);
-  });
   const dayKeys = Object.keys(dayMap).sort();
   dayKeys.forEach((dk, idx) => {
     const d = new Date(dk);
@@ -753,3 +762,4 @@ document.getElementById("toggleView").addEventListener("click", function () {
 </script>
 </body>
 </html>
+
