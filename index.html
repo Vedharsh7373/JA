@@ -568,9 +568,12 @@ document.getElementById("saveStudentBtn").onclick = function() {
   if (!teachers[tch].students) teachers[tch].students = [];
   teachers[tch].students.push(name);
   saveToStorage();
-  if (tch === selectedTeacherId) setupFormForSelectedTeacher();
+
+  // always rebuild the dropdown for the currently selected teacher
+  setupFormForSelectedTeacher();
+
   document.getElementById("studentModal").style.display = "none";
-  document.getElementById("newStudentName").value="";
+  document.getElementById("newStudentName").value = "";
   alert("Student added!");
 };
 
@@ -635,7 +638,7 @@ function displayTable(list) {
     const rows = table.querySelectorAll('tr');
     let lines = [];
 
-    // header
+    // Build header line
     let headerCells = rows[0].querySelectorAll('th, td');
     let headerParts = [];
     headerCells.forEach(cell => {
@@ -643,7 +646,7 @@ function displayTable(list) {
     });
     lines.push(headerParts.join(' | '));
 
-    // data rows
+    // Build each data line
     for (let i = 1; i < rows.length; i++) {
       const cells = rows[i].querySelectorAll('td');
       let parts = [];
@@ -667,7 +670,7 @@ function displayTable(list) {
       alert("Plain table copied!");
     });
   };
-}  // <-- important closing brace for displayTable
+}
 
 function buildCalendarInterface() {
   const container = document.getElementById("tableContainer");
@@ -722,4 +725,59 @@ function refreshCalendarView() {
   });
 }
 
-function
+function renderDaysForMonth(monthKey, list) {
+  const daysDiv = document.getElementById("dayList");
+  const dayEntriesDiv = document.getElementById("dayEntries");
+  daysDiv.innerHTML = "Days: ";
+  dayEntriesDiv.innerHTML = "";
+
+  const dayMap = {};
+  list.forEach(e => {
+    if (!dayMap[e.date]) dayMap[e.date] = [];
+    dayMap[e.date].push(e);
+  });
+
+  const dayKeys = Object.keys(dayMap).sort();
+  dayKeys.forEach((dk, idx) => {
+    const d = new Date(dk);
+    const label = d.getDate();
+    const btn = document.createElement("button");
+    btn.textContent = label;
+    btn.className = "secondary";
+    btn.style.marginRight = "4px";
+    btn.onclick = function() { renderEntriesForDay(dk, dayMap[dk]); };
+    daysDiv.appendChild(btn);
+    if (idx === dayKeys.length - 1) renderEntriesForDay(dk, dayMap[dk]);
+  });
+}
+
+function renderEntriesForDay(dateStr, list) {
+  const dayEntriesDiv = document.getElementById("dayEntries");
+  if (!list || list.length === 0) {
+    dayEntriesDiv.innerHTML = "No entries.";
+    return;
+  }
+  let html = `<h4>Entries for ${dateStr}</h4><table><tr>
+<th>Student</th><th>Subject</th><th>Chapter</th><th>Work Done</th></tr>`;
+  list.forEach(r => {
+    html += `<tr>
+<td>${r.student}</td>
+<td>${r.subject}</td>
+<td>${r.chapter}</td>
+<td>${r.workDone}</td>
+</tr>`;
+  });
+  html += `</table>`;
+  dayEntriesDiv.innerHTML = html;
+}
+
+document.getElementById("toggleView").addEventListener("click", function () {
+  const main = document.getElementById("mainContainer");
+  main.classList.toggle("desktop");
+  document.getElementById("toggleView").textContent = main.classList.contains("desktop")
+    ? "Optimize for Mobile"
+    : "Optimize for Desktop";
+});
+</script>
+</body>
+</html>
