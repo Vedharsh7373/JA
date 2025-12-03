@@ -291,22 +291,9 @@ const TEACHERS_SEED = {
     pin: "2834",
     subjects: ["English", "SST", "Other"],
     students: [
-      "ISHAN (ONLINE)",
-      "JAI",
-      "AZMINA",
-      "ANIKET",
-      "SADHYA",
-      "DHRUV",
-      "KEERTHAN",
-      "KEERTHANA",
-      "TANMAI VITUKURI",
-      "PRASHAM",
-      "SMRITHI",
-      "VIDHI",
-      "DAKSH",
-      "AMY",
-      "VEDHIKA",
-      "VIVAN"
+      "ISHAN (ONLINE)","JAI","AZMINA","ANIKET","SADHYA","DHRUV","KEERTHAN",
+      "KEERTHANA","TANMAI VITUKURI","PRASHAM","SMRITHI","VIDHI","DAKSH",
+      "AMY","VEDHIKA","VIVAN"
     ]
   },
   divya: {
@@ -314,27 +301,9 @@ const TEACHERS_SEED = {
     pin: "7358",
     subjects: ["Science", "Other"],
     students: [
-      "MANASVI",
-      "RISHAB",
-      "RUHINAA",
-      "DHRUV",
-      "KEERTHAN",
-      "AAYAN",
-      "KEERTHANA",
-      "SMRITHI",
-      "AMY",
-      "ANGATH",
-      "NAVANEETH",
-      "VEDANSH",
-      "VEDHIKA",
-      "VIDHI",
-      "ADVAITH",
-      "ADVIKA",
-      "AKRITHI",
-      "DANYA",
-      "GURANSH SINGH",
-      "MANYA",
-      "VIVAN"
+      "MANASVI","RISHAB","RUHINAA","DHRUV","KEERTHAN","AAYAN","KEERTHANA",
+      "SMRITHI","AMY","ANGATH","NAVANEETH","VEDANSH","VEDHIKA","VIDHI",
+      "ADVAITH","ADVIKA","AKRITHI","DANYA","GURANSH SINGH","MANYA","VIVAN"
     ]
   },
   aishwarya: {
@@ -342,46 +311,14 @@ const TEACHERS_SEED = {
     pin: "9384",
     subjects: ["Math", "Other"],
     students: [
-      "ADVAITH",
-      "SHRAVYA",
-      "MERRIN",
-      "GURANSH SINGH",
-      "AKRITHI",
-      "ARYAN",
-      "ARYA HEGDE",
-      "ADVIKA",
-      "MANYA",
-      "NAVANEETH",
-      "DAKSH",
-      "VEDANSH",
-      "VEDHARSH",
-      "VIDHI",
-      "AMY",
-      "ANGATH",
-      "DIVITH",
-      "SWETHA PRASANNA",
-      "VAIHNAV SARAVANAKUMAR",
-      "SAHIL",
-      "VEDHIKA",
-      "ARIN",
-      "AAYAN",
-      "DHEER",
-      "VEDANTH",
-      "SADHYA",
-      "SHRISHTI",
-      "ABHISHEK (wkend)",
-      "SRIYAM (wkend)",
-      "KARAN (wkend)",
-      "NITHYA (Singapore)",
-      "VARDHINI",
-      "ISHA",
-      "PANAV SHARMA",
-      "GEENA",
-      "MANASVI",
-      "ANWESHA",
-      "RISHAB",
-      "VISHNU TEJ (Wkend)",
-      "RUHINAA"
+      "ADVAITH","SHRAVYA","MERRIN","GURANSH SINGH","AKRITHI","ARYAN",
+      "ARYA HEGDE","ADVIKA","MANYA","NAVANEETH","DAKSH","VEDANSH",
+      "VEDHARSH","VIDHI","AMY","ANGATH","DIVITH","SWETHA PRASANNA",
+      "VAIHNAV SARAVANAKUMAR","SAHIL","VEDHIKA","ARIN","AAYAN","DHEER",
+      "VEDANTH","SADHYA","SHRISHTI","ABHISHEK (wkend)","SRIYAM (wkend)",
+      "KARAN (wkend)","NITHYA (Singapore)","VARDHINI","ISHA",
+      "PANAV SHARMA","GEENA","MANASVI","ANWESHA","RISHAB",
+      "VISHNU TEJ (Wkend)","RUHINAA"
     ]
   }
 };
@@ -449,7 +386,7 @@ function showTeacherSelectPrompt() {
 }
 
 function ensureSelectedTeacher() {
-  let t = localStorage.getItem(SELECTED_TEACHER_KEY);
+  const t = localStorage.getItem(SELECTED_TEACHER_KEY);
   if (t && teachers[t]) {
     selectedTeacherId = t;
     return true;
@@ -463,14 +400,16 @@ function ensureSelectedTeacher() {
 
 window.addEventListener("load", function () {
   if (!ensureStoragePermission()) return;
-  loadFromStorage();
-  if (!ensureSelectedTeacher()) return;
-  setupFormForSelectedTeacher();
+  loadFromStorage();                 // 1) load teachers
+  if (!ensureSelectedTeacher()) return;  // 2) set selectedTeacherId
+  setupFormForSelectedTeacher();     // 3) build dropdown from teacher
   buildCalendarInterface();
 });
 
 function setupFormForSelectedTeacher() {
   const teacher = teachers[selectedTeacherId];
+  if (!teacher) return;
+
   const teacherSelect = document.getElementById("teacher");
   if (teacherSelect && teacherSelect.parentElement) {
     teacherSelect.parentElement.style.display = "none";
@@ -481,7 +420,7 @@ function setupFormForSelectedTeacher() {
 
   studentSelect.innerHTML = '<option value="" disabled selected>Select Student</option>';
   (teacher.students || []).forEach(s => {
-    let o = document.createElement("option");
+    const o = document.createElement("option");
     o.value = s;
     o.textContent = s;
     studentSelect.appendChild(o);
@@ -489,7 +428,7 @@ function setupFormForSelectedTeacher() {
 
   subjectSelect.innerHTML = '<option value="" disabled selected>Select Subject</option>';
   (teacher.subjects || []).forEach(s => {
-    let o = document.createElement("option");
+    const o = document.createElement("option");
     o.value = s;
     o.textContent = s;
     subjectSelect.appendChild(o);
@@ -549,7 +488,7 @@ document.getElementById("addStudentBtn").onclick = function() {
   let select = document.getElementById("newStudentTeacher");
   select.innerHTML = "";
   Object.keys(teachers).forEach(k => {
-    let o = document.createElement("option");
+    const o = document.createElement("option");
     o.value = k;
     o.textContent = teachers[k].display;
     select.appendChild(o);
@@ -562,14 +501,13 @@ document.getElementById("closeStudentModal").onclick = function() {
 };
 
 document.getElementById("saveStudentBtn").onclick = function() {
-  let name = document.getElementById("newStudentName").value.trim();
-  let tch = document.getElementById("newStudentTeacher").value;
+  const name = document.getElementById("newStudentName").value.trim();
+  const tch = document.getElementById("newStudentTeacher").value;
   if (!name || !tch) return alert("Enter student name and teacher.");
   if (!teachers[tch].students) teachers[tch].students = [];
   teachers[tch].students.push(name);
   saveToStorage();
 
-  // always rebuild the dropdown for the currently selected teacher
   setupFormForSelectedTeacher();
 
   document.getElementById("studentModal").style.display = "none";
@@ -586,10 +524,10 @@ document.getElementById("closeTeacherModal").onclick = function() {
 };
 
 document.getElementById("saveTeacherBtn").onclick = function() {
-  let display = document.getElementById("newTeacherName").value.trim();
-  let subjects = document.getElementById("newTeacherSubjects").value
+  const display = document.getElementById("newTeacherName").value.trim();
+  const subjects = document.getElementById("newTeacherSubjects").value
     .split(",").map(s => s.trim()).filter(Boolean);
-  let pin = document.getElementById("newTeacherPin").value.trim();
+  const pin = document.getElementById("newTeacherPin").value.trim();
   if (!display || !subjects.length || !pin) return alert("Fill all fields.");
   const id = "t_" + Date.now() + "_" + Math.floor(Math.random()*1000);
   teachers[id] = { display, subjects, pin, students: [] };
@@ -638,7 +576,6 @@ function displayTable(list) {
     const rows = table.querySelectorAll('tr');
     let lines = [];
 
-    // Build header line
     let headerCells = rows[0].querySelectorAll('th, td');
     let headerParts = [];
     headerCells.forEach(cell => {
@@ -646,7 +583,6 @@ function displayTable(list) {
     });
     lines.push(headerParts.join(' | '));
 
-    // Build each data line
     for (let i = 1; i < rows.length; i++) {
       const cells = rows[i].querySelectorAll('td');
       let parts = [];
