@@ -1,719 +1,708 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Teacher Entry Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --main-red: red;
-  --main-darkred: darkred;
-  --main-white: white;
-  --main-pale: lavenderblush;
-}
-body {
-  font-family: "Roboto", Arial, sans-serif;
-  margin: 0;
-  background: var(--main-white);
-  color: var(--main-red);
-  min-height: 100vh;
-}
-header {
-  background: var(--main-red);
-  color: var(--main-white);
-  padding: 18px 0 18px 0;
-  text-align: center;
-  box-shadow: 0 8px 26px -12px rgba(0,0,0,0.5);
-}
-h1 {
-  margin: 0;
-  font-family: "Montserrat", Arial, sans-serif;
-  font-size: 2.3rem;
-  letter-spacing: 1.5px;
-  font-weight: 900;
-}
-.container {
-  max-width: 610px;
-  margin: 24px auto 0;
-  background: var(--main-white);
-  border: 3px solid var(--main-red);
-  border-radius: 0;
-  box-shadow: 0 8px 24px -10px rgba(0,0,0,0.35);
-  padding: 30px 26px 32px;
-}
-label {
-  display: block;
-  font-weight: 700;
-  margin-top: 18px;
-  margin-bottom: 7px;
-  color: var(--main-red);
-  font-family: "Montserrat", Arial, sans-serif;
-  letter-spacing: 1px;
-}
-input, select, textarea {
-  width: 100%;
-  padding: 9.5px 9px;
-  margin-top: 2.5px;
-  border-radius: 6px;
-  border: 2px solid var(--main-red);
-  font-size: 1.06rem;
-  background: var(--main-white);
-  font-family: "Roboto", Arial, sans-serif;
-  box-sizing: border-box;
-  color: var(--main-darkred);
-  transition: box-shadow 0.16s, border-color 0.2s, background 0.2s;
-}
-input:focus, select:focus, textarea:focus {
-  border-color: var(--main-darkred);
-  outline: none;
-  background: var(--main-pale);
-  box-shadow: 0 0 0 2px rgba(224,0,0,0.2);
-}
-textarea { resize: vertical; }
-button {
-  margin-top: 15px;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
-  font-size: 1.05rem;
-  font-family: "Montserrat", Arial, sans-serif;
-  font-weight: 700;
-  letter-spacing: 1px;
-  transition: background 0.22s, color 0.22s, box-shadow 0.23s, transform 0.05s;
-}
-button.primary {
-  background: var(--main-red);
-  color: var(--main-white);
-  box-shadow: 0 6px 18px -8px rgba(0,0,0,0.45);
-}
-button.primary:hover {
-  background: var(--main-darkred);
-  box-shadow: 0 8px 22px -10px rgba(0,0,0,0.55);
-  transform: translateY(-1px);
-}
-button.secondary {
-  background: var(--main-white);
-  color: var(--main-red);
-  border: 2px solid var(--main-red);
-}
-button.secondary:hover {
-  background: var(--main-pale);
-  color: var(--main-darkred);
-}
-.entry, #tableContainer {
-  margin-top: 22px;
-  padding: 16px;
-  border-radius: 10px;
-  background: var(--main-pale);
-  font-size: 1.02rem;
-  color: var(--main-darkred);
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  background: var(--main-white);
-}
-th, td {
-  border: 1px solid var(--main-red);
-  padding: 8px 7px;
-  text-align: left;
-  font-size: 0.96rem;
-}
-th {
-  background: var(--main-red);
-  color: var(--main-white);
-  font-family: "Montserrat", Arial, sans-serif;
-  font-weight: 800;
-  letter-spacing: 1.1px;
-}
-#copyButton {
-  margin-top: 12px;
-  float: right;
-}
-#toggleView {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 18px;
-}
-.desktop form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px 28px;
-}
-.desktop form > div.full-width,
-.desktop .full-width {
-  grid-column: span 2;
-}
-.modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.35);
-  z-index: 1000;
-}
-.modal-content {
-  background: var(--main-white);
-  margin: 10% auto;
-  padding: 28px 24px 20px 24px;
-  width: 96%;
-  max-width: 340px;
-  border: 2px solid var(--main-red);
-  border-radius: 16px;
-  color: var(--main-red);
-  font-size: 1rem;
-  position: relative;
-}
-.close {
-  position: absolute;
-  top: 8px; right: 14px;
-  font-size: 26px;
-  cursor: pointer;
-  color: var(--main-darkred);
-  font-weight: bold;
-}
-.close:hover { color: var(--main-red); }
-@media (max-width: 700px) {
-  .container {padding: 22px 10px 24px;}
-  th, td {font-size: 0.9rem;}
-  .modal-content {padding: 20px 7vw;}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Johns Academy Tuition Log</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --main-red: red;
+            --main-darkred: darkred;
+            --main-white: white;
+            --main-pale: lavenderblush;
+        }
+        
+        body {
+            font-family: "Roboto", Arial, sans-serif;
+            margin: 0;
+            background: var(--main-white);
+            color: var(--main-red);
+            min-height: 100vh;
+        }
+        
+        header {
+            background: var(--main-red);
+            color: var(--main-white);
+            padding: 18px 0 18px 0;
+            text-align: center;
+            box-shadow: 0 8px 26px -12px rgba(0,0,0,0.5);
+        }
+        
+        h1 {
+            margin: 0;
+            font-family: "Montserrat", Arial, sans-serif;
+            font-size: 2.3rem;
+            letter-spacing: 1.5px;
+            font-weight: 900;
+        }
+        
+        .container {
+            max-width: 610px;
+            margin: 24px auto 0;
+            background: var(--main-white);
+            border: 3px solid var(--main-red);
+            border-radius: 0;
+            box-shadow: 0 8px 24px -10px rgba(0,0,0,0.35);
+            padding: 30px 26px 32px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 700;
+            margin-top: 18px;
+            margin-bottom: 7px;
+            color: var(--main-red);
+            font-family: "Montserrat", Arial, sans-serif;
+            letter-spacing: 1px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 9.5px 9px;
+            margin-top: 2.5px;
+            border-radius: 6px;
+            border: 2px solid var(--main-red);
+            font-size: 1.06rem;
+            background: var(--main-white);
+            font-family: "Roboto", Arial, sans-serif;
+            box-sizing: border-box;
+            color: var(--main-darkred);
+            transition: box-shadow 0.16s, border-color 0.2s, background 0.2s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--main-darkred);
+            outline: none;
+            background: var(--main-pale);
+            box-shadow: 0 0 0 2px rgba(224,0,0,0.2);
+        }
+        
+        textarea { resize: vertical; }
+        
+        button {
+            margin-top: 15px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 1.05rem;
+            font-family: "Montserrat", Arial, sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: background 0.22s, color 0.22s, box-shadow 0.23s, transform 0.05s;
+        }
+        
+        button.primary {
+            background: var(--main-red);
+            color: var(--main-white);
+            box-shadow: 0 6px 18px -8px rgba(0,0,0,0.45);
+        }
+        
+        button.primary:hover {
+            background: var(--main-darkred);
+            box-shadow: 0 8px 22px -10px rgba(0,0,0,0.55);
+            transform: translateY(-1px);
+        }
+        
+        button.secondary {
+            background: var(--main-white);
+            color: var(--main-red);
+            border: 2px solid var(--main-red);
+        }
+        
+        button.secondary:hover {
+            background: var(--main-pale);
+            color: var(--main-darkred);
+        }
+        
+        .entry, #tableContainer {
+            margin-top: 22px;
+            padding: 16px;
+            border-radius: 10px;
+            background: var(--main-pale);
+            font-size: 1.02rem;
+            color: var(--main-darkred);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: var(--main-white);
+        }
+        
+        th, td {
+            border: 1px solid var(--main-red);
+            padding: 8px 7px;
+            text-align: left;
+            font-size: 0.96rem;
+        }
+        
+        th {
+            background: var(--main-red);
+            color: var(--main-white);
+            font-family: "Montserrat", Arial, sans-serif;
+            font-weight: 800;
+            letter-spacing: 1.1px;
+        }
+        
+        #toggleView {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 18px;
+        }
+        
+        .desktop form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 28px;
+        }
+        
+        .desktop form > div.full-width,
+        .desktop .full-width {
+            grid-column: span 2;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.35);
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: var(--main-white);
+            padding: 28px 24px 20px 24px;
+            width: 96%;
+            max-width: 340px;
+            border: 2px solid var(--main-red);
+            border-radius: 16px;
+            color: var(--main-red);
+            font-size: 1rem;
+            position: relative;
+        }
+        
+        .close {
+            position: absolute;
+            top: 8px; right: 14px;
+            font-size: 26px;
+            cursor: pointer;
+            color: var(--main-darkred);
+            font-weight: bold;
+        }
+        
+        .close:hover { color: var(--main-red); }
+        
+        .grade-filter {
+            background: var(--main-pale);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid var(--main-red);
+            margin-bottom: 20px;
+        }
+        
+        .grade-filter label {
+            display: inline-block;
+            margin: 0 10px 0 0;
+        }
+        
+        .grade-filter select {
+            width: auto;
+            display: inline-block;
+            margin: 0;
+        }
+        
+        @media (max-width: 700px) {
+            .container {padding: 22px 10px 24px;}
+            th, td {font-size: 0.9rem;}
+            .modal-content {padding: 20px 7vw;}
+        }
+    </style>
 </head>
 <body>
-<header>
-  <img src="https://raw.githubusercontent.com/Vedharsh7373/JA/main/ja.png"
-       alt="Johns Academy Logo"
-       style="height:80px; margin-bottom:6px; margin-top:4px;">
-  <h1>JOHNS ACADEMY TUITION LOG</h1>
-</header>
-
-<div class="container" id="mainContainer">
-  <button id="toggleView" class="secondary">Optimize for Desktop</button>
-
-  <form id="entryForm">
-    <div>
-      <label>Teacher:</label>
-      <select id="teacher">
-        <option value="" disabled selected>Will be auto-set</option>
-      </select>
+    <header>
+        <img src="https://raw.githubusercontent.com/Vedharsh7373/JA/main/ja.png"
+             alt="Johns Academy Logo"
+             style="height:80px; margin-bottom:6px; margin-top:4px;">
+        <h1>JOHNS ACADEMY TUITION LOG</h1>
+    </header>
+    <div class="container" id="mainContainer">
+        <button id="toggleView" class="secondary">Optimize for Desktop</button>
+        
+        <div class="grade-filter">
+            <label for="gradeFilter">Filter by Grade:</label>
+            <select id="gradeFilter">
+                <!-- Will be populated dynamically -->
+            </select>
+        </div>
+        
+        <form id="entryForm">
+            <div>
+                <label>Teacher:</label>
+                <select id="teacherName" required>
+                    <option value="" disabled selected>Select Teacher</option>
+                </select>
+            </div>
+            <div>
+                <label>Student:</label>
+                <select id="student" required>
+                    <option value="" disabled selected>Select Student</option>
+                </select>
+            </div>
+            <div>
+                <label>Subject:</label>
+                <select id="subject" required>
+                    <option value="" disabled selected>Select Subject</option>
+                </select>
+            </div>
+            <div>
+                <label>Chapter:</label>
+                <input type="text" id="chapter" required>
+            </div>
+            <div class="full-width">
+                <label>Work Done:</label>
+                <textarea id="workDone" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="primary">Submit Entry</button>
+        </form>
+        
+        <div style="margin-top:15px">
+            <button id="addStudentBtn" class="secondary">Add Student</button>
+            <button id="addTeacherBtn" class="secondary">Add Teacher</button>
+        </div>
+        
+        <div style="margin-top:15px">
+            <label>Enter PIN to view today's submissions:</label>
+            <input type="password" id="pin" placeholder="Enter PIN">
+            <button id="viewSubmissionsBtn" class="primary">View Submissions</button>
+        </div>
+        
+        <div id="output" class="entry" style="display:none"></div>
+        <div id="tableContainer"></div>
     </div>
-
-    <div>
-      <label>Student:</label>
-      <select id="student" required>
-        <option value="" disabled selected>Select Student</option>
-      </select>
+    
+    <div class="modal" id="studentModal">
+        <div class="modal-content">
+            <span class="close" id="closeStudentModal">&times;</span>
+            <h3 style="margin-top:0;">Add New Student</h3>
+            <label>Name:</label>
+            <input type="text" id="newStudentName">
+            <label>Grade:</label>
+            <select id="studentGrade">
+                <option value="">Select Grade</option>
+            </select>
+            <label>Assign Teacher:</label>
+            <select id="newStudentTeacher"></select>
+            <button id="saveStudentBtn" class="primary">Save Student</button>
+        </div>
     </div>
-
-    <div>
-      <label>Subject:</label>
-      <select id="subject" required>
-        <option value="" disabled selected>Select Subject</option>
-      </select>
+    
+    <div class="modal" id="teacherModal">
+        <div class="modal-content">
+            <span class="close" id="closeTeacherModal">&times;</span>
+            <h3 style="margin-top:0;">Add New Teacher</h3>
+            <label>Display Name:</label>
+            <input type="text" id="newTeacherName">
+            <label>Subjects (comma separated):</label>
+            <input type="text" id="newTeacherSubjects">
+            <label>PIN (numbers only):</label>
+            <input type="password" id="newTeacherPin">
+            <button id="saveTeacherBtn" class="primary">Save Teacher</button>
+        </div>
     </div>
-
-    <div>
-      <label>Chapter:</label>
-      <input type="text" id="chapter" required>
-    </div>
-
-    <div class="full-width">
-      <label>Work Done:</label>
-      <textarea id="workDone" rows="3" required></textarea>
-    </div>
-
-    <button type="submit" class="primary">Submit Entry</button>
-  </form>
-
-  <div style="margin-top:15px">
-    <button id="addStudentBtn" class="secondary">Add Student</button>
-    <button id="addTeacherBtn" class="secondary">Add Teacher</button>
-  </div>
-
-  <div style="margin-top:15px">
-    <label>Enter PIN to view today's submissions:</label>
-    <input type="password" id="pin" placeholder="Enter PIN">
-    <button id="viewSubmissionsBtn" class="primary">View Submissions</button>
-  </div>
-
-  <div id="output" class="entry" style="display:none"></div>
-  <div id="tableContainer"></div>
-</div>
-
-<div class="modal" id="studentModal">
-  <div class="modal-content">
-    <span class="close" id="closeStudentModal">&times;</span>
-    <h3 style="margin-top:0;">Add New Student</h3>
-    <label>Name:</label>
-    <input type="text" id="newStudentName">
-    <label>Assign Teacher:</label>
-    <select id="newStudentTeacher"></select>
-    <button id="saveStudentBtn" class="primary">Save Student</button>
-  </div>
-</div>
-
-<div class="modal" id="teacherModal">
-  <div class="modal-content">
-    <span class="close" id="closeTeacherModal">&times;</span>
-    <h3 style="margin-top:0;">Add New Teacher</h3>
-    <label>Display Name:</label>
-    <input type="text" id="newTeacherName">
-    <label>Subjects (comma separated):</label>
-    <input type="text" id="newTeacherSubjects">
-    <label>PIN (numbers only):</label>
-    <input type="password" id="newTeacherPin">
-    <button id="saveTeacherBtn" class="primary">Save Teacher</button>
-  </div>
-</div>
-
-<footer style="margin-top:24px; text-align:center; padding:14px 8px; font-family:'Montserrat',Arial,sans-serif; font-size:0.9rem; color:darkred;">
-  <span style="margin-right:6px;">Made by</span>
-  <a href="https://web-bros-fqzz.b12sites.com" target="_blank" rel="noopener noreferrer"
-     style="color:red; font-weight:700; text-decoration:none;">
-    Web Bros
-  </a>
-</footer>
-
-<script>
-const STORAGE_KEY = "teacherPortalData_v2";
-const STORAGE_ACCEPT_KEY = "teacherPortalStorageAccepted";
-const SELECTED_TEACHER_KEY = "teacherPortalSelectedTeacher";
-const FOUR_MONTHS_MS = 1000 * 60 * 60 * 24 * 30 * 4;
-
-const TEACHERS_SEED = {
-  geethu: {
-    display: "GEETHU M'am",
-    pin: "2834",
-    subjects: ["English", "SST", "Other"],
-    students: [
-      "ISHAN (ONLINE)","JAI","AZMINA","ANIKET","SADHYA","DHRUV","KEERTHAN",
-      "KEERTHANA","TANMAI VITUKURI","PRASHAM","SMRITHI","VIDHI","DAKSH",
-      "AMY","VEDHIKA","VIVAN"
-    ]
-  },
-  divya: {
-    display: "DIVYA M'am",
-    pin: "7358",
-    subjects: ["Science", "Other"],
-    students: [
-      "MANASVI","RISHAB","RUHINAA","DHRUV","KEERTHAN","AAYAN","KEERTHANA",
-      "SMRITHI","AMY","ANGATH","NAVANEETH","VEDANSH","VEDHIKA","VIDHI",
-      "ADVAITH","ADVIKA","AKRITHI","DANYA","GURANSH SINGH","MANYA","VIVAN"
-    ]
-  },
-  aishwarya: {
-    display: "AISHWARYA M'am",
-    pin: "9384",
-    subjects: ["Math", "Other"],
-    students: [
-      "ADVAITH","SHRAVYA","MERRIN","GURANSH SINGH","AKRITHI","ARYAN",
-      "ARYA HEGDE","ADVIKA","MANYA","NAVANEETH","DAKSH","VEDANSH",
-      "VEDHARSH","VIDHI","AMY","ANGATH","DIVITH","SWETHA PRASANNA",
-      "VAIHNAV SARAVANAKUMAR","SAHIL","VEDHIKA","ARIN","AAYAN","DHEER",
-      "VEDANTH","SADHYA","SHRISHTI","ABHISHEK (wkend)","SRIYAM (wkend)",
-      "KARAN (wkend)","NITHYA (Singapore)","VARDHINI","ISHA",
-      "PANAV SHARMA","GEENA","MANASVI","ANWESHA","RISHAB",
-      "VISHNU TEJ (Wkend)","RUHINAA"
-    ]
-  }
-};
-
-let teachers = {};
-let entries = [];
-let selectedTeacherId = null;
-
-function ensureStoragePermission() {
-  const accepted = localStorage.getItem(STORAGE_ACCEPT_KEY);
-  if (!accepted) {
-    const ok = confirm(
-      "This app uses your browser's local storage to save teachers, students, and submissions for about 4 months. Click OK to allow."
-    );
-    if (!ok) {
-      alert("Without storage permission, the portal cannot save your data.");
-      return false;
-    }
-    localStorage.setItem(STORAGE_ACCEPT_KEY, "yes");
-  }
-  return true;
-}
-
-function loadFromStorage() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      teachers = JSON.parse(JSON.stringify(TEACHERS_SEED));
-      entries = [];
-      saveToStorage();
-      return;
-    }
-    const data = JSON.parse(raw);
-    teachers = data.teachers || JSON.parse(JSON.stringify(TEACHERS_SEED));
-    entries = (data.entries || []).filter(e => {
-      const createdAt = e.createdAt || Date.now();
-      return Date.now() - createdAt < FOUR_MONTHS_MS;
-    });
-    saveToStorage();
-  } catch (e) {
-    teachers = JSON.parse(JSON.stringify(TEACHERS_SEED));
-    entries = [];
-    saveToStorage();
-  }
-}
-
-function saveToStorage() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ teachers, entries }));
-}
-
-function showTeacherSelectPrompt() {
-  let message = "Select your teacher by typing the number:\n";
-  const ids = Object.keys(teachers);
-  ids.forEach((id, index) => {
-    message += `${index + 1}. ${teachers[id].display}\n`;
-  });
-  const input = prompt(message);
-  if (!input) return null;
-  const idx = parseInt(input, 10) - 1;
-  if (isNaN(idx) || idx < 0 || idx >= ids.length) {
-    alert("Invalid choice. Please reload and try again.");
-    return null;
-  }
-  return ids[idx];
-}
-
-function ensureSelectedTeacher() {
-  const t = localStorage.getItem(SELECTED_TEACHER_KEY);
-  if (t && teachers[t]) {
-    selectedTeacherId = t;
-    return true;
-  }
-  const chosen = showTeacherSelectPrompt();
-  if (!chosen) return false;
-  selectedTeacherId = chosen;
-  localStorage.setItem(SELECTED_TEACHER_KEY, chosen);
-  return true;
-}
-
-window.addEventListener("load", function () {
-  if (!ensureStoragePermission()) return;
-  loadFromStorage();                 // 1) load teachers
-  if (!ensureSelectedTeacher()) return;  // 2) set selectedTeacherId
-  setupFormForSelectedTeacher();     // 3) build dropdown from teacher
-  buildCalendarInterface();
-});
-
-function setupFormForSelectedTeacher() {
-  const teacher = teachers[selectedTeacherId];
-  if (!teacher) return;
-
-  const teacherSelect = document.getElementById("teacher");
-  if (teacherSelect && teacherSelect.parentElement) {
-    teacherSelect.parentElement.style.display = "none";
-  }
-  const studentSelect = document.getElementById("student");
-  const subjectSelect = document.getElementById("subject");
-  if (!studentSelect || !subjectSelect) return;
-
-  studentSelect.innerHTML = '<option value="" disabled selected>Select Student</option>';
-  (teacher.students || []).forEach(s => {
-    const o = document.createElement("option");
-    o.value = s;
-    o.textContent = s;
-    studentSelect.appendChild(o);
-  });
-
-  subjectSelect.innerHTML = '<option value="" disabled selected>Select Subject</option>';
-  (teacher.subjects || []).forEach(s => {
-    const o = document.createElement("option");
-    o.value = s;
-    o.textContent = s;
-    subjectSelect.appendChild(o);
-  });
-}
-
-document.getElementById("entryForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  if (!ensureStoragePermission()) return;
-  if (!selectedTeacherId) {
-    alert("No teacher selected.");
-    return;
-  }
-
-  const student = document.getElementById("student").value;
-  const subject = document.getElementById("subject").value;
-  const chapter = document.getElementById("chapter").value;
-  const workDone = document.getElementById("workDone").value;
-
-  if (!student || !subject || !chapter || !workDone) {
-    alert("Please fill all fields.");
-    return;
-  }
-
-  const today = new Date().toISOString().split("T")[0];
-  const entry = {
-    date: today,
-    teacherId: selectedTeacherId,
-    student,
-    subject,
-    chapter,
-    workDone,
-    createdAt: Date.now()
-  };
-
-  entries.push(entry);
-  saveToStorage();
-  showSubmission(student, subject, chapter, workDone);
-  refreshCalendarView();
-});
-
-function showSubmission(student, subject, chapter, workDone) {
-  const output = document.getElementById("output");
-  const teacher = teachers[selectedTeacherId];
-  output.innerHTML = `<b>Submission Successful!</b><br><br>
-Teacher: ${teacher.display}<br>
-Student: ${student}<br>
-Subject: ${subject}<br>
-Chapter: ${chapter}<br>
-Work Done: ${workDone}`;
-  output.style.display = "block";
-  document.getElementById("entryForm").reset();
-  setTimeout(() => output.style.display = "none", 5000);
-}
-
-document.getElementById("addStudentBtn").onclick = function() {
-  let select = document.getElementById("newStudentTeacher");
-  select.innerHTML = "";
-  Object.keys(teachers).forEach(k => {
-    const o = document.createElement("option");
-    o.value = k;
-    o.textContent = teachers[k].display;
-    select.appendChild(o);
-  });
-  document.getElementById("studentModal").style.display = "block";
-};
-
-document.getElementById("closeStudentModal").onclick = function() {
-  document.getElementById("studentModal").style.display = "none";
-};
-
-document.getElementById("saveStudentBtn").onclick = function() {
-  const name = document.getElementById("newStudentName").value.trim();
-  const tch = document.getElementById("newStudentTeacher").value;
-  if (!name || !tch) return alert("Enter student name and teacher.");
-  if (!teachers[tch].students) teachers[tch].students = [];
-  teachers[tch].students.push(name);
-  saveToStorage();
-
-  setupFormForSelectedTeacher();
-
-  document.getElementById("studentModal").style.display = "none";
-  document.getElementById("newStudentName").value = "";
-  alert("Student added!");
-};
-
-document.getElementById("addTeacherBtn").onclick = function() {
-  document.getElementById("teacherModal").style.display = "block";
-};
-
-document.getElementById("closeTeacherModal").onclick = function() {
-  document.getElementById("teacherModal").style.display = "none";
-};
-
-document.getElementById("saveTeacherBtn").onclick = function() {
-  const display = document.getElementById("newTeacherName").value.trim();
-  const subjects = document.getElementById("newTeacherSubjects").value
-    .split(",").map(s => s.trim()).filter(Boolean);
-  const pin = document.getElementById("newTeacherPin").value.trim();
-  if (!display || !subjects.length || !pin) return alert("Fill all fields.");
-  const id = "t_" + Date.now() + "_" + Math.floor(Math.random()*1000);
-  teachers[id] = { display, subjects, pin, students: [] };
-  saveToStorage();
-  document.getElementById("teacherModal").style.display = "none";
-  document.getElementById("newTeacherName").value = "";
-  document.getElementById("newTeacherSubjects").value = "";
-  document.getElementById("newTeacherPin").value = "";
-  alert("Teacher added!");
-};
-
-window.onclick = function(ev) {
-  if (ev.target === document.getElementById("studentModal"))
-    document.getElementById("studentModal").style.display = "none";
-  if (ev.target === document.getElementById("teacherModal"))
-    document.getElementById("teacherModal").style.display = "none";
-};
-
-document.getElementById("viewSubmissionsBtn").onclick = function() {
-  const pin = document.getElementById("pin").value;
-  const teacherKey = Object.keys(teachers).find(k => teachers[k].pin === pin);
-  if (!teacherKey) { alert("Invalid PIN"); return; }
-  const today = new Date().toISOString().split("T")[0];
-  const todaysEntries = entries.filter(e => e.teacherId === teacherKey && e.date === today);
-  if (todaysEntries.length > 0) displayTable(todaysEntries);
-  else document.getElementById("tableContainer").innerHTML = "No submissions for today.";
-};
-
-function displayTable(list) {
-  let html = `<table id='submissionsTable'><tr>
-<th>Date</th><th>Student</th><th>Subject</th><th>Chapter</th><th>Work Done</th></tr>`;
-  list.forEach(r => {
-    html += `<tr>
-<td>${r.date}</td>
-<td>${r.student}</td>
-<td>${r.subject}</td>
-<td>${r.chapter}</td>
-<td>${r.workDone}</td>
-</tr>`;
-  });
-  html += `</table><button id='copyButton' class='secondary'>Copy Table</button>`;
-  document.getElementById("tableContainer").innerHTML = html;
-
-  document.getElementById('copyButton').onclick = function() {
-    const table = document.getElementById('submissionsTable');
-    const rows = table.querySelectorAll('tr');
-    let lines = [];
-
-    let headerCells = rows[0].querySelectorAll('th, td');
-    let headerParts = [];
-    headerCells.forEach(cell => {
-      headerParts.push(cell.textContent.trim());
-    });
-    lines.push(headerParts.join(' | '));
-
-    for (let i = 1; i < rows.length; i++) {
-      const cells = rows[i].querySelectorAll('td');
-      let parts = [];
-      cells.forEach(cell => {
-        parts.push(cell.textContent.trim());
-      });
-      lines.push(parts.join(' | '));
-    }
-
-    const markdownTable = lines.join('\n');
-
-    navigator.clipboard.writeText(markdownTable).then(() => {
-      alert("Plain table copied!");
-    }).catch(() => {
-      const textarea = document.createElement('textarea');
-      textarea.value = markdownTable;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-      alert("Plain table copied!");
-    });
-  };
-}
-
-function buildCalendarInterface() {
-  const container = document.getElementById("tableContainer");
-  container.innerHTML = `
-    <div id="calendarView">
-      <h3 style="margin-top:10px;">Entries Calendar</h3>
-      <div id="monthList" style="margin-bottom:8px;"></div>
-      <div id="dayList" style="margin-bottom:8px;"></div>
-      <div id="dayEntries"></div>
-    </div>
-  `;
-  refreshCalendarView();
-}
-
-function refreshCalendarView() {
-  if (!selectedTeacherId) return;
-  const filtered = entries.filter(e => e.teacherId === selectedTeacherId);
-  const monthsDiv = document.getElementById("monthList");
-  const daysDiv = document.getElementById("dayList");
-  const dayEntriesDiv = document.getElementById("dayEntries");
-  if (!monthsDiv || !daysDiv || !dayEntriesDiv) return;
-
-  const monthMap = {};
-  filtered.forEach(e => {
-    const d = new Date(e.date);
-    const key = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0");
-    if (!monthMap[key]) monthMap[key] = [];
-    monthMap[key].push(e);
-  });
-
-  const monthKeys = Object.keys(monthMap).sort();
-  if (monthKeys.length === 0) {
-    monthsDiv.innerHTML = "No entries yet.";
-    daysDiv.innerHTML = "";
-    dayEntriesDiv.innerHTML = "";
-    return;
-  }
-
-  monthsDiv.innerHTML = "Months: ";
-  monthKeys.forEach((mk, idx) => {
-    const dParts = mk.split("-");
-    const year = dParts[0];
-    const monthIndex = parseInt(dParts[1], 10) - 1;
-    const monthName = new Date(year, monthIndex, 1).toLocaleString("en-US", {month:"short"});
-    const btn = document.createElement("button");
-    btn.textContent = monthName + " " + year;
-    btn.className = "secondary";
-    btn.style.marginRight = "6px";
-    btn.onclick = function() { renderDaysForMonth(mk, monthMap[mk]); };
-    monthsDiv.appendChild(btn);
-    if (idx === monthKeys.length - 1) renderDaysForMonth(mk, monthMap[mk]);
-  });
-}
-
-function renderDaysForMonth(monthKey, list) {
-  const daysDiv = document.getElementById("dayList");
-  const dayEntriesDiv = document.getElementById("dayEntries");
-  daysDiv.innerHTML = "Days: ";
-  dayEntriesDiv.innerHTML = "";
-
-  const dayMap = {};
-  list.forEach(e => {
-    if (!dayMap[e.date]) dayMap[e.date] = [];
-    dayMap[e.date].push(e);
-  });
-
-  const dayKeys = Object.keys(dayMap).sort();
-  dayKeys.forEach((dk, idx) => {
-    const d = new Date(dk);
-    const label = d.getDate();
-    const btn = document.createElement("button");
-    btn.textContent = label;
-    btn.className = "secondary";
-    btn.style.marginRight = "4px";
-    btn.onclick = function() { renderEntriesForDay(dk, dayMap[dk]); };
-    daysDiv.appendChild(btn);
-    if (idx === dayKeys.length - 1) renderEntriesForDay(dk, dayMap[dk]);
-  });
-}
-
-function renderEntriesForDay(dateStr, list) {
-  const dayEntriesDiv = document.getElementById("dayEntries");
-  if (!list || list.length === 0) {
-    dayEntriesDiv.innerHTML = "No entries.";
-    return;
-  }
-  let html = `<h4>Entries for ${dateStr}</h4><table><tr>
-<th>Student</th><th>Subject</th><th>Chapter</th><th>Work Done</th></tr>`;
-  list.forEach(r => {
-    html += `<tr>
-<td>${r.student}</td>
-<td>${r.subject}</td>
-<td>${r.chapter}</td>
-<td>${r.workDone}</td>
-</tr>`;
-  });
-  html += `</table>`;
-  dayEntriesDiv.innerHTML = html;
-}
-
-document.getElementById("toggleView").addEventListener("click", function () {
-  const main = document.getElementById("mainContainer");
-  main.classList.toggle("desktop");
-  document.getElementById("toggleView").textContent = main.classList.contains("desktop")
-    ? "Optimize for Mobile"
-    : "Optimize for Desktop";
-});
-</script>
+    
+    <footer style="margin-top:24px; text-align:center; padding:14px 8px; font-family:'Montserrat',Arial,sans-serif; font-size:0.9rem; color:darkred;">
+        <span style="margin-right:6px;">Made by</span>
+        <a href="https://web-bros-fqzz.b12sites.com" target="_blank" rel="noopener noreferrer"
+           style="color:red; font-weight:700; text-decoration:none;">
+            Web Bros
+        </a>
+    </footer>
+    
+    <script>
+        let teachers = [
+            { name: "GEETHU M'am", subjects: ["English", "SST"], pin: "1234" },
+            { name: "DIVYA M'am", subjects: ["Science"], pin: "5678" },
+            { name: "AISHWARYA M'am", subjects: ["Math", "Science"], pin: "9012" }
+        ];
+        
+        let students = [
+            { name: "ISHAN (ONLINE)", grade: "10", teacherIndex: 0 },
+            { name: "JAI", grade: "4", teacherIndex: 0 },
+            { name: "RAVINA", grade: "4", teacherIndex: 0 },
+            { name: "ANIKET", grade: "5", teacherIndex: 0 },
+            { name: "SADHYA", grade: "6", teacherIndex: 0 },
+            { name: "DHRUV", grade: "6", teacherIndex: 0 },
+            { name: "KEERTHAN", grade: "6", teacherIndex: 0 },
+            { name: "KEERTHANA", grade: "7", teacherIndex: 0 },
+            { name: "TANMAI VITUKURI", grade: "7", teacherIndex: 0 },
+            { name: "PRASAD", grade: "7", teacherIndex: 0 },
+            { name: "SMRITHI", grade: "7", teacherIndex: 0 },
+            { name: "VIDHI", grade: "7", teacherIndex: 0 },
+            { name: "DAKSH", grade: "8", teacherIndex: 0 },
+            { name: "AMY", grade: "8", teacherIndex: 0 },
+            { name: "VEDHIKA", grade: "9", teacherIndex: 0 },
+            { name: "VIVAN", grade: "9", teacherIndex: 0 },
+            { name: "MANASVI", grade: "10", teacherIndex: 1 },
+            { name: "RISHAB", grade: "10", teacherIndex: 1 },
+            { name: "RUHINAA", grade: "10", teacherIndex: 1 },
+            { name: "AAYAN", grade: "7", teacherIndex: 1 },
+            { name: "ANGATH", grade: "8", teacherIndex: 1 },
+            { name: "NAVANEETH", grade: "8", teacherIndex: 1 },
+            { name: "VEDANSH", grade: "8", teacherIndex: 1 },
+            { name: "ADVAITH", grade: "9", teacherIndex: 1 },
+            { name: "ADVIKA", grade: "9", teacherIndex: 1 },
+            { name: "AKRITHI", grade: "9", teacherIndex: 1 },
+            { name: "DANYA", grade: "9", teacherIndex: 1 },
+            { name: "GURANSH SINGH", grade: "9", teacherIndex: 1 },
+            { name: "MANYA", grade: "9", teacherIndex: 1 },
+            { name: "ADVAITH", grade: "9", teacherIndex: 2 },
+            { name: "SHRAVYA", grade: "9", teacherIndex: 2 },
+            { name: "MERRIN", grade: "9", teacherIndex: 2 },
+            { name: "GURANSH SINGH", grade: "9", teacherIndex: 2 },
+            { name: "AKRITHI", grade: "9", teacherIndex: 2 },
+            { name: "ARYAN", grade: "9", teacherIndex: 2 },
+            { name: "ARYA HEGDE", grade: "9", teacherIndex: 2 },
+            { name: "ADVIKA", grade: "9", teacherIndex: 2 },
+            { name: "DANYA", grade: "9", teacherIndex: 2 },
+            { name: "MANYA", grade: "9", teacherIndex: 2 },
+            { name: "NAVANEETH", grade: "8", teacherIndex: 2 },
+            { name: "DAKSH", grade: "8", teacherIndex: 2 },
+            { name: "VEDANSH", grade: "8", teacherIndex: 2 },
+            { name: "VEDARSH", grade: "8", teacherIndex: 2 },
+            { name: "VIDHI", grade: "8", teacherIndex: 2 },
+            { name: "AMY", grade: "8", teacherIndex: 2 },
+            { name: "ANGATH", grade: "8", teacherIndex: 2 },
+            { name: "DIVITH", grade: "8", teacherIndex: 2 },
+            { name: "SWETHA PRASANNA", grade: "8", teacherIndex: 2 },
+            { name: "VAIHNAV SARAVANAKUMAR", grade: "8", teacherIndex: 2 },
+            { name: "SAHIL", grade: "8", teacherIndex: 2 },
+            { name: "VEDHIKA", grade: "8", teacherIndex: 2 },
+            { name: "ARIN", grade: "8", teacherIndex: 2 },
+            { name: "AAYAN", grade: "7", teacherIndex: 2 },
+            { name: "DHEER", grade: "7", teacherIndex: 2 },
+            { name: "VEDANTH", grade: "7", teacherIndex: 2 },
+            { name: "SADHYA", grade: "6", teacherIndex: 2 },
+            { name: "SHRISTHI", grade: "5", teacherIndex: 2 },
+            { name: "ABHISHEK (wkend)", grade: "5", teacherIndex: 2 },
+            { name: "SRIYAM (wkend)", grade: "5", teacherIndex: 2 },
+            { name: "KARAN (wkend)", grade: "5", teacherIndex: 2 },
+            { name: "NITHYA (Singapore)", grade: "10", teacherIndex: 2 },
+            { name: "VARIDHI", grade: "10", teacherIndex: 2 },
+            { name: "ISHA", grade: "10", teacherIndex: 2 },
+            { name: "PANAV SHARMA", grade: "10", teacherIndex: 2 },
+            { name: "GEENA", grade: "10", teacherIndex: 2 },
+            { name: "MANASVI", grade: "10", teacherIndex: 2 },
+            { name: "ANWESHA", grade: "10", teacherIndex: 2 },
+            { name: "RISHAB", grade: "10", teacherIndex: 2 },
+            { name: "VISHNU TEJ (wkend)", grade: "10", teacherIndex: 2 },
+            { name: "RUHINAA", grade: "10", teacherIndex: 2 }
+        ];
+        
+        let submissions = [];
+        let currentTeacher = null;
+        
+        function updateTeacherSelect() {
+            const select = document.getElementById('teacherName');
+            select.innerHTML = '<option value="" disabled selected>Select Teacher</option>';
+            teachers.forEach((teacher, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = teacher.name;
+                select.appendChild(option);
+            });
+        }
+        
+        function getAvailableGrades() {
+            const grades = new Set();
+            students.forEach(student => grades.add(student.grade));
+            return Array.from(grades).sort((a, b) => parseInt(a) - parseInt(b));
+        }
+        
+        function updateGradeFilterDropdown() {
+            const select = document.getElementById('gradeFilter');
+            select.innerHTML = '<option value="all">All Grades</option>';
+            
+            const availableGrades = getAvailableGrades();
+            availableGrades.forEach(grade => {
+                const option = document.createElement('option');
+                option.value = grade;
+                option.textContent = `Grade ${grade}`;
+                select.appendChild(option);
+            });
+        }
+        
+        function updateStudentGradeDropdown() {
+            const select = document.getElementById('studentGrade');
+            select.innerHTML = '<option value="">Select Grade</option>';
+            
+            for (let i = 1; i <= 12; i++) {
+                const option = document.createElement('option');
+                option.value = i.toString();
+                option.textContent = `Grade ${i}`;
+                select.appendChild(option);
+            }
+        }
+        
+        document.getElementById('gradeFilter').addEventListener('change', function() {
+            updateStudentDropdown();
+        });
+        
+        updateTeacherSelect();
+        
+        document.getElementById("toggleView").addEventListener("click", function () {
+            const main = document.getElementById("mainContainer");
+            main.classList.toggle("desktop");
+            document.getElementById("toggleView").textContent = main.classList.contains("desktop")
+                ? "Optimize for Mobile"
+                : "Optimize for Desktop";
+        });
+        
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            if (modalId === 'studentModal') {
+                updateTeacherDropdown();
+            }
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        function updateTeacherDropdown() {
+            const select = document.getElementById('newStudentTeacher');
+            select.innerHTML = '<option value="">Select Teacher</option>';
+            teachers.forEach((teacher, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = teacher.name;
+                select.appendChild(option);
+            });
+        }
+        
+        function updateStudentDropdown() {
+            const select = document.getElementById('student');
+            const gradeFilter = document.getElementById('gradeFilter').value;
+            const teacherIndex = document.getElementById('teacherName').value;
+            
+            select.innerHTML = '<option value="" disabled selected>Select Student</option>';
+            
+            students.forEach((student, index) => {
+                const matchesGrade = gradeFilter === 'all' || student.grade === gradeFilter;
+                const matchesTeacher = !teacherIndex || student.teacherIndex === parseInt(teacherIndex);
+                
+                if (matchesGrade && matchesTeacher) {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = `${student.name} (Grade ${student.grade})`;
+                    select.appendChild(option);
+                }
+            });
+        }
+        
+        function updateSubjectDropdown() {
+            const select = document.getElementById('subject');
+            const studentIndex = document.getElementById('student').value;
+            const teacherIndex = document.getElementById('teacherName').value;
+            
+            select.innerHTML = '<option value="" disabled selected>Select Subject</option>';
+            
+            if (teacherIndex !== '' && teachers[teacherIndex]) {
+                const teacher = teachers[teacherIndex];
+                currentTeacher = teacher;
+                
+                if (teacher && teacher.subjects) {
+                    teacher.subjects.forEach(subject => {
+                        const option = document.createElement('option');
+                        option.value = subject;
+                        option.textContent = subject;
+                        select.appendChild(option);
+                    });
+                }
+            }
+        }
+        
+        document.getElementById('teacherName').addEventListener('change', function() {
+            updateStudentDropdown();
+            updateSubjectDropdown();
+        });
+        
+        document.getElementById('student').addEventListener('change', updateSubjectDropdown);
+        
+        document.getElementById('addTeacherBtn').onclick = function() {
+            openModal('teacherModal');
+        };
+        
+        document.getElementById('closeTeacherModal').onclick = function() {
+            closeModal('teacherModal');
+        };
+        
+        document.getElementById('saveTeacherBtn').onclick = function() {
+            const name = document.getElementById('newTeacherName').value.trim();
+            const subjectsStr = document.getElementById('newTeacherSubjects').value.trim();
+            const pin = document.getElementById('newTeacherPin').value.trim();
+            
+            if (!name || !subjectsStr || !pin) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            if (!/^\d+$/.test(pin)) {
+                alert('PIN must contain only numbers');
+                return;
+            }
+            
+            const subjects = subjectsStr.split(',').map(s => s.trim()).filter(s => s);
+            
+            teachers.push({ name, subjects, pin });
+            
+            alert('Teacher added successfully!');
+            document.getElementById('newTeacherName').value = '';
+            document.getElementById('newTeacherSubjects').value = '';
+            document.getElementById('newTeacherPin').value = '';
+            updateTeacherSelect();
+            closeModal('teacherModal');
+        };
+        
+        document.getElementById('addStudentBtn').onclick = function() {
+            openModal('studentModal');
+        };
+        
+        document.getElementById('closeStudentModal').onclick = function() {
+            closeModal('studentModal');
+        };
+        
+        document.getElementById('saveStudentBtn').onclick = function() {
+            const name = document.getElementById('newStudentName').value.trim();
+            const grade = document.getElementById('studentGrade').value;
+            const teacherIndex = document.getElementById('newStudentTeacher').value;
+            
+            if (!name || !grade || teacherIndex === '') {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            students.push({ name, grade, teacherIndex: parseInt(teacherIndex) });
+            
+            alert('Student added successfully!');
+            document.getElementById('newStudentName').value = '';
+            document.getElementById('studentGrade').value = '';
+            document.getElementById('newStudentTeacher').value = '';
+            updateStudentDropdown();
+            updateGradeFilterDropdown();
+            closeModal('studentModal');
+        };
+        
+        document.getElementById('entryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const studentIndex = document.getElementById('student').value;
+            const subject = document.getElementById('subject').value;
+            const chapter = document.getElementById('chapter').value.trim();
+            const workDone = document.getElementById('workDone').value.trim();
+            
+            if (!studentIndex || !subject || !chapter || !workDone) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            const student = students[studentIndex];
+            const teacher = currentTeacher;
+            
+            const submission = {
+                student: student.name,
+                grade: student.grade,
+                teacher: teacher ? teacher.name : 'Unknown',
+                subject,
+                chapter,
+                workDone,
+                timestamp: new Date().toLocaleString()
+            };
+            
+            submissions.push(submission);
+            
+            const output = document.getElementById('output');
+            output.innerHTML = `<b>Submission Successful!</b><br><br>
+                Teacher: ${teacher ? teacher.name : 'Unknown'}<br>
+                Student: ${student.name} (Grade ${student.grade})<br>
+                Subject: ${subject}<br>
+                Chapter: ${chapter}<br>
+                Work Done: ${workDone}`;
+            output.style.display = 'block';
+            
+            document.getElementById('chapter').value = '';
+            document.getElementById('workDone').value = '';
+            
+            setTimeout(() => output.style.display = 'none', 5000);
+        });
+        
+        document.getElementById('viewSubmissionsBtn').onclick = function() {
+            const pin = document.getElementById('pin').value.trim();
+            
+            if (!pin) {
+                alert('Please enter a PIN');
+                return;
+            }
+            
+            const teacher = teachers.find(t => t.pin === pin);
+            
+            if (!teacher) {
+                alert('Invalid PIN');
+                return;
+            }
+            
+            displaySubmissions();
+            document.getElementById('pin').value = '';
+        };
+        
+        function displaySubmissions() {
+            const listDiv = document.getElementById('tableContainer');
+            const today = new Date().toLocaleDateString();
+            const todaySubmissions = submissions.filter(s => {
+                const submissionDate = new Date(s.timestamp).toLocaleDateString();
+                return submissionDate === today;
+            });
+            
+            if (todaySubmissions.length === 0) {
+                listDiv.innerHTML = '<p>No submissions found for today.</p>';
+                return;
+            }
+            
+            let html = `<table><tr>
+                <th>Student</th><th>Grade</th><th>Teacher</th><th>Subject</th><th>Chapter</th><th>Work Done</th></tr>`;
+            todaySubmissions.forEach(sub => {
+                html += `<tr>
+                    <td>${sub.student}</td>
+                    <td>${sub.grade}</td>
+                    <td>${sub.teacher}</td>
+                    <td>${sub.subject}</td>
+                    <td>${sub.chapter}</td>
+                    <td>${sub.workDone}</td>
+                </tr>`;
+            });
+            html += `</table>`;
+            listDiv.innerHTML = html;
+        }
+        
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+        
+        updateGradeFilterDropdown();
+        updateStudentGradeDropdown();
+        updateStudentDropdown();
+    </script>
 </body>
 </html>
