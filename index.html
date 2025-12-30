@@ -223,7 +223,6 @@ th {
   color: var(--main-darkred);
   font-family: "Roboto", Arial, sans-serif;
 }
-
 /* CALENDAR STYLES */
 .calendar-wrapper {
   margin-top: 15px;
@@ -289,7 +288,6 @@ th {
   font-size: 0.75rem;
   color: var(--main-darkred);
 }
-
 /* RESPONSIVE */
 @media (max-width: 700px) {
   .container {padding: 22px 10px 24px;}
@@ -302,8 +300,8 @@ th {
 <body>
 <header>
   <img src="https://raw.githubusercontent.com/Vedharsh7373/JA/main/ja.png"
-       alt="Johns Academy Logo"
-       style="height:80px; margin-bottom:6px; margin-top:4px;">
+    alt="Johns Academy Logo"
+    style="height:80px; margin-bottom:6px; margin-top:4px;">
   <h1>JOHNS ACADEMY TEACHERS LOG</h1>
 </header>
 
@@ -420,20 +418,60 @@ th {
 <footer style="margin-top:24px; text-align:center; padding:14px 8px; font-family:'Montserrat',Arial,sans-serif; font-size:0.9rem; color:darkred;">
   <span style="margin-right:6px;">Made by</span>
   <a href="https://web-bros-fqzz.b12sites.com/" target="_blank" rel="noopener noreferrer"
-     style="color:red; font-weight:700; text-decoration:none;">
+    style="color:red; font-weight:700; text-decoration:none;">
     Web Bros
   </a>
 </footer>
 
 <script>
-// ---------------- DATA ----------------
-let teachers = [
+// ---- PERSISTENCE HELPERS ----
+const STORAGE_KEYS = {
+  teachers: 'ja_teachers',
+  students: 'ja_students',
+  submissions: 'ja_submissions'
+};
+
+function getFourMonthsAgoDate() {
+  const d = new Date();
+  d.setMonth(d.getMonth() - 4);
+  return d;
+}
+
+function loadFromStorage(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    return JSON.parse(raw);
+  } catch (e) {
+    return fallback;
+  }
+}
+
+function saveToStorage(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.warn('Failed to save', key, e);
+  }
+}
+
+// Remove submissions older than 4 months
+function cleanOldSubmissions(arr) {
+  const cutoff = getFourMonthsAgoDate();
+  return arr.filter(s => {
+    const t = new Date(s.timestamp);
+    return t >= cutoff;
+  });
+}
+
+// ---- DEFAULT DATA ----
+const defaultTeachers = [
   { name: "GEETHU M'am", subjects: ["English", "SST"] },
   { name: "DIVYA M'am", subjects: ["Science", "Biology", "Chemistry", "Physics"] },
   { name: "AISHWARYA M'am", subjects: ["Math","Other"] },
 ];
 
-let students = [
+const defaultStudents = [
   { name: "ISHAN (ONLINE)", grade: "10", teacherIndex: 0 },
   { name: "JAI", grade: "4", teacherIndex: 0 },
   { name: "RAVINA", grade: "4", teacherIndex: 0 },
@@ -463,6 +501,7 @@ let students = [
   { name: "DANYA", grade: "9", teacherIndex: 1 },
   { name: "GURANSH SINGH", grade: "9", teacherIndex: 1 },
   { name: "MANYA", grade: "9", teacherIndex: 1 },
+
   { name: "ADVAITH", grade: "9", teacherIndex: 2 },
   { name: "SHRAVYA", grade: "9", teacherIndex: 2 },
   { name: "MERRIN", grade: "9", teacherIndex: 2 },
@@ -473,6 +512,7 @@ let students = [
   { name: "ADVIKA", grade: "9", teacherIndex: 2 },
   { name: "DANYA", grade: "9", teacherIndex: 2 },
   { name: "MANYA", grade: "9", teacherIndex: 2 },
+
   { name: "NAVANEETH", grade: "8", teacherIndex: 2 },
   { name: "DAKSH", grade: "8", teacherIndex: 2 },
   { name: "VEDANSH", grade: "8", teacherIndex: 2 },
@@ -486,14 +526,18 @@ let students = [
   { name: "SAHIL", grade: "8", teacherIndex: 2 },
   { name: "VEDHIKA", grade: "8", teacherIndex: 2 },
   { name: "ARIN", grade: "8", teacherIndex: 2 },
+
   { name: "AAYAN", grade: "7", teacherIndex: 2 },
   { name: "DHEER", grade: "7", teacherIndex: 2 },
   { name: "VEDANTH", grade: "7", teacherIndex: 2 },
+
   { name: "SADHYA", grade: "6", teacherIndex: 2 },
+
   { name: "SHRISTHI", grade: "5", teacherIndex: 2 },
   { name: "ABHISHEK (wkend)", grade: "5", teacherIndex: 2 },
   { name: "SRIYAM (wkend)", grade: "5", teacherIndex: 2 },
   { name: "KARAN (wkend)", grade: "5", teacherIndex: 2 },
+
   { name: "NITHYA (Singapore)", grade: "10", teacherIndex: 2 },
   { name: "VARIDHI", grade: "10", teacherIndex: 2 },
   { name: "ISHA", grade: "10", teacherIndex: 2 },
@@ -506,7 +550,13 @@ let students = [
   { name: "RUHINAA", grade: "10", teacherIndex: 2 }
 ];
 
-let submissions = [];
+// ---- LOAD OR INIT DATA ----
+let teachers = loadFromStorage(STORAGE_KEYS.teachers, defaultTeachers);
+let students = loadFromStorage(STORAGE_KEYS.students, defaultStudents);
+let submissions = loadFromStorage(STORAGE_KEYS.submissions, []);
+submissions = cleanOldSubmissions(submissions);
+saveToStorage(STORAGE_KEYS.submissions, submissions);
+
 let currentTeacher = null;
 let currentSubmissions = [];
 
@@ -531,6 +581,7 @@ function updateTeacherSelect() {
     option1.value = index;
     option1.textContent = teacher.name;
     select.appendChild(option1);
+
     const option2 = document.createElement('option');
     option2.value = index;
     option2.textContent = teacher.name;
@@ -599,7 +650,6 @@ function updateTeacherDropdown() {
     select.appendChild(option);
   });
 }
-
 function updateStudentDropdown() {
   const select = document.getElementById('student');
   const gradeFilter = document.getElementById('gradeFilter').value;
@@ -616,7 +666,6 @@ function updateStudentDropdown() {
     }
   });
 }
-
 function updateSubjectDropdown() {
   const select = document.getElementById('subject');
   const teacherIndex = document.getElementById('teacherName').value;
@@ -634,7 +683,6 @@ function updateSubjectDropdown() {
     }
   }
 }
-
 document.getElementById('teacherName').addEventListener('change', function() {
   updateStudentDropdown();
   updateSubjectDropdown();
@@ -657,13 +705,13 @@ document.getElementById('saveTeacherBtn').onclick = function() {
   }
   const subjects = subjectsStr.split(',').map(s => s.trim()).filter(s => s);
   teachers.push({ name, subjects });
+  saveToStorage(STORAGE_KEYS.teachers, teachers);
   alert('Teacher added successfully!');
   document.getElementById('newTeacherName').value = '';
   document.getElementById('newTeacherSubjects').value = '';
   updateTeacherSelect();
   closeModal('teacherModal');
 };
-
 document.getElementById('addStudentBtn').onclick = function() {
   openModal('studentModal');
 };
@@ -679,6 +727,7 @@ document.getElementById('saveStudentBtn').onclick = function() {
     return;
   }
   students.push({ name, grade, teacherIndex: parseInt(teacherIndex) });
+  saveToStorage(STORAGE_KEYS.students, students);
   alert('Student added successfully!');
   document.getElementById('newStudentName').value = '';
   document.getElementById('studentGrade').value = '';
@@ -711,13 +760,16 @@ document.getElementById('entryForm').addEventListener('submit', function(e) {
     timestamp: new Date().toISOString()
   };
   submissions.push(submission);
+  submissions = cleanOldSubmissions(submissions);
+  saveToStorage(STORAGE_KEYS.submissions, submissions);
+
   const output = document.getElementById('output');
   output.innerHTML = `<b>Submission Successful!</b><br><br>
-  Teacher: ${teacher ? teacher.name : 'Unknown'}<br>
-  Student: ${student.name} (Grade ${student.grade})<br>
-  Subject: ${subject}<br>
-  Chapter: ${chapter}<br>
-  Work Done: ${workDone}`;
+    Teacher: ${teacher ? teacher.name : 'Unknown'}<br>
+    Student: ${student.name} (Grade ${student.grade})<br>
+    Subject: ${subject}<br>
+    Chapter: ${chapter}<br>
+    Work Done: ${workDone}`;
   output.style.display = 'block';
   document.getElementById('chapter').value = '';
   document.getElementById('workDone').value = '';
@@ -739,7 +791,6 @@ document.getElementById('viewSubmissionsBtn').onclick = function() {
 function displaySubmissions(teacherName) {
   const listDiv = document.getElementById('tableContainer');
   const exportSection = document.getElementById('exportSection');
-
   const selectedDateLocal = calSelectedDate.toLocaleDateString();
 
   const filteredSubmissions = submissions.filter(s => {
@@ -748,7 +799,6 @@ function displaySubmissions(teacherName) {
   });
 
   currentSubmissions = filteredSubmissions;
-
   if (filteredSubmissions.length === 0) {
     listDiv.innerHTML = `<p>No submissions found for ${teacherName} on ${selectedDateLocal}.</p>`;
     exportSection.style.display = 'none';
@@ -759,7 +809,7 @@ function displaySubmissions(teacherName) {
     Submissions for ${teacherName} on ${selectedDateLocal}
   </h3>`;
   html += `<table><tr>
-  <th>Student</th><th>Grade</th><th>Subject</th><th>Chapter</th><th>Work Done</th></tr>`;
+    <th>Student</th><th>Grade</th><th>Subject</th><th>Chapter</th><th>Work Done</th></tr>`;
   filteredSubmissions.forEach(sub => {
     html += `<tr>
       <td>${sub.student}</td>
@@ -781,6 +831,7 @@ function initCalendarLimits() {
   const minDateObj = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   minDateObj.setMonth(minDateObj.getMonth() - 4);
   calMinDate = minDateObj;
+
   calCurrentDate = new Date(today.getFullYear(), today.getMonth(), 1);
   calSelectedDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 }
@@ -790,14 +841,12 @@ function isSameDay(d1, d2) {
          d1.getMonth() === d2.getMonth() &&
          d1.getDate() === d2.getDate();
 }
-
 function dateInRange(date, min, max) {
   const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
   const mn = new Date(min.getFullYear(), min.getMonth(), min.getDate());
   const mx = new Date(max.getFullYear(), max.getMonth(), max.getDate());
   return d >= mn && d <= mx;
 }
-
 function renderCalendar() {
   const titleEl = document.getElementById('calendarTitle');
   const gridEl = document.getElementById('calendarGrid');
@@ -805,7 +854,6 @@ function renderCalendar() {
 
   const year = calCurrentDate.getFullYear();
   const month = calCurrentDate.getMonth();
-
   titleEl.textContent = `${monthsNames[month]} ${year}`;
 
   const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -825,7 +873,6 @@ function renderCalendar() {
   }
 
   const today = new Date();
-
   for (let day = 1; day <= daysInMonth; day++) {
     const date = new Date(year, month, day);
     const cell = document.createElement('div');
@@ -849,11 +896,9 @@ function renderCalendar() {
     if (isSameDay(date, calSelectedDate)) {
       cell.classList.add('selected');
     }
-
     gridEl.appendChild(cell);
   }
 }
-
 document.getElementById('prevMonthBtn').addEventListener('click', () => {
   const newDate = new Date(calCurrentDate.getFullYear(), calCurrentDate.getMonth() - 1, 1);
   const lastAllowedMonthStart = new Date(calMinDate.getFullYear(), calMinDate.getMonth(), 1);
@@ -861,7 +906,6 @@ document.getElementById('prevMonthBtn').addEventListener('click', () => {
   calCurrentDate = newDate;
   renderCalendar();
 });
-
 document.getElementById('nextMonthBtn').addEventListener('click', () => {
   const newDate = new Date(calCurrentDate.getFullYear(), calCurrentDate.getMonth() + 1, 1);
   const maxMonthStart = new Date(calMaxDate.getFullYear(), calMaxDate.getMonth(), 1);
@@ -920,7 +964,6 @@ document.getElementById('exportWhatsAppBtn').onclick = async function() {
         return;
       }
       const file = new File([blob], 'johns-academy-report.png', { type: blob.type || 'image/png' });
-
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
           await navigator.share({
@@ -954,7 +997,6 @@ document.getElementById('exportWhatsAppBtn').onclick = async function() {
     alert('Error generating image. Please try again.');
   }
 };
-
 function fallbackDownload(canvas) {
   const link = document.createElement('a');
   link.download = 'johns-academy-daily-report.png';
@@ -974,6 +1016,6 @@ renderCalendar();
 </script>
 
 <script async data-explicit-opt-in="true" data-cookie-opt-in="true" data-deployment-id="dpl_3XDUh4f9RuGJNZ47XFJ5KosEQJaQ" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
+<script async data-explicit-opt-in="true" data-cookie-opt-in="true" data-deployment-id="dpl_HRRkffxnEnJfwye7JLJLywfsRMTx" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
 </body>
 </html>
-
