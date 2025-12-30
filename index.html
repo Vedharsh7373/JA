@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Johns Academy Tuition Log</title>
+    <title>Johns Academy Teachers Log</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --main-red: red;
@@ -221,6 +222,41 @@
             display: inline-block;
             margin: 0;
         }
+
+        .export-section {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128C7E;
+        }
+
+        #exportCanvas {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        #exportCanvas h2 {
+            color: var(--main-red);
+            font-family: "Montserrat", Arial, sans-serif;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #exportCanvas .report-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--main-darkred);
+            font-family: "Roboto", Arial, sans-serif;
+        }
         
         @media (max-width: 700px) {
             .container {padding: 22px 10px 24px;}
@@ -234,7 +270,7 @@
         <img src="https://raw.githubusercontent.com/Vedharsh7373/JA/main/ja.png"
              alt="Johns Academy Logo"
              style="height:80px; margin-bottom:6px; margin-top:4px;">
-        <h1>JOHNS ACADEMY TUITION LOG</h1>
+        <h1>JOHNS ACADEMY TEACHERS LOG</h1>
     </header>
     <div class="container" id="mainContainer">
         <button id="toggleView" class="secondary">Optimize for Desktop</button>
@@ -242,7 +278,7 @@
         <div class="grade-filter">
             <label for="gradeFilter">Filter by Grade:</label>
             <select id="gradeFilter">
-                <!-- Will be populated dynamically -->
+                <!-- populated via JS -->
             </select>
         </div>
         
@@ -282,13 +318,23 @@
         </div>
         
         <div style="margin-top:15px">
-            <label>Enter PIN to view today's submissions:</label>
-            <input type="password" id="pin" placeholder="Enter PIN">
+            <label>Select Teacher to view today's submissions:</label>
+            <select id="teacherSelect">
+                <option value="" disabled selected>Select Teacher</option>
+            </select>
             <button id="viewSubmissionsBtn" class="primary">View Submissions</button>
         </div>
         
         <div id="output" class="entry" style="display:none"></div>
         <div id="tableContainer"></div>
+        
+        <div class="export-section" id="exportSection" style="display:none;">
+            <button id="exportWhatsAppBtn" class="primary whatsapp-btn">📱 Share to WhatsApp (PNG)</button>
+        </div>
+    </div>
+    
+    <div style="position: absolute; left: -9999px; top: -9999px;">
+        <div id="exportCanvas"></div>
     </div>
     
     <div class="modal" id="studentModal">
@@ -315,8 +361,6 @@
             <input type="text" id="newTeacherName">
             <label>Subjects (comma separated):</label>
             <input type="text" id="newTeacherSubjects">
-            <label>PIN (numbers only):</label>
-            <input type="password" id="newTeacherPin">
             <button id="saveTeacherBtn" class="primary">Save Teacher</button>
         </div>
     </div>
@@ -330,10 +374,11 @@
     </footer>
     
     <script>
+        // ---------------- DATA ----------------
         let teachers = [
-            { name: "GEETHU M'am", subjects: ["English", "SST"], pin: "1234" },
-            { name: "DIVYA M'am", subjects: ["Science"], pin: "5678" },
-            { name: "AISHWARYA M'am", subjects: ["Math", "Science"], pin: "9012" }
+            { name: "GEETHU M'am", subjects: ["English", "SST"] },
+            { name: "DIVYA M'am", subjects: ["Science", "Biology", "Chemistry", "Physics"] },
+            { name: "AISHWARYA M'am", subjects: ["Math","Other"] },
         ];
         
         let students = [
@@ -411,15 +456,26 @@
         
         let submissions = [];
         let currentTeacher = null;
+        let currentSubmissions = [];
         
+        // ---------- INIT DROPDOWNS ----------
         function updateTeacherSelect() {
             const select = document.getElementById('teacherName');
+            const viewSelect = document.getElementById('teacherSelect');
+            
             select.innerHTML = '<option value="" disabled selected>Select Teacher</option>';
+            viewSelect.innerHTML = '<option value="" disabled selected>Select Teacher</option>';
+            
             teachers.forEach((teacher, index) => {
-                const option = document.createElement('option');
-                option.value = index;
-                option.textContent = teacher.name;
-                select.appendChild(option);
+                const option1 = document.createElement('option');
+                option1.value = index;
+                option1.textContent = teacher.name;
+                select.appendChild(option1);
+                
+                const option2 = document.createElement('option');
+                option2.value = index;
+                option2.textContent = teacher.name;
+                viewSelect.appendChild(option2);
             });
         }
         
@@ -457,8 +513,6 @@
         document.getElementById('gradeFilter').addEventListener('change', function() {
             updateStudentDropdown();
         });
-        
-        updateTeacherSelect();
         
         document.getElementById("toggleView").addEventListener("click", function () {
             const main = document.getElementById("mainContainer");
@@ -512,7 +566,6 @@
         
         function updateSubjectDropdown() {
             const select = document.getElementById('subject');
-            const studentIndex = document.getElementById('student').value;
             const teacherIndex = document.getElementById('teacherName').value;
             
             select.innerHTML = '<option value="" disabled selected>Select Subject</option>';
@@ -539,6 +592,7 @@
         
         document.getElementById('student').addEventListener('change', updateSubjectDropdown);
         
+        // ---------- MODAL BUTTONS ----------
         document.getElementById('addTeacherBtn').onclick = function() {
             openModal('teacherModal');
         };
@@ -550,26 +604,19 @@
         document.getElementById('saveTeacherBtn').onclick = function() {
             const name = document.getElementById('newTeacherName').value.trim();
             const subjectsStr = document.getElementById('newTeacherSubjects').value.trim();
-            const pin = document.getElementById('newTeacherPin').value.trim();
             
-            if (!name || !subjectsStr || !pin) {
+            if (!name || !subjectsStr) {
                 alert('Please fill in all fields');
-                return;
-            }
-            
-            if (!/^\d+$/.test(pin)) {
-                alert('PIN must contain only numbers');
                 return;
             }
             
             const subjects = subjectsStr.split(',').map(s => s.trim()).filter(s => s);
             
-            teachers.push({ name, subjects, pin });
+            teachers.push({ name, subjects });
             
             alert('Teacher added successfully!');
             document.getElementById('newTeacherName').value = '';
             document.getElementById('newTeacherSubjects').value = '';
-            document.getElementById('newTeacherPin').value = '';
             updateTeacherSelect();
             closeModal('teacherModal');
         };
@@ -603,6 +650,7 @@
             closeModal('studentModal');
         };
         
+        // ---------- SUBMISSION FORM ----------
         document.getElementById('entryForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -646,45 +694,45 @@
             setTimeout(() => output.style.display = 'none', 5000);
         });
         
+        // ---------- VIEW SUBMISSIONS ----------
         document.getElementById('viewSubmissionsBtn').onclick = function() {
-            const pin = document.getElementById('pin').value.trim();
+            const teacherIndex = document.getElementById('teacherSelect').value;
             
-            if (!pin) {
-                alert('Please enter a PIN');
+            if (teacherIndex === '') {
+                alert('Please select a teacher');
                 return;
             }
             
-            const teacher = teachers.find(t => t.pin === pin);
-            
-            if (!teacher) {
-                alert('Invalid PIN');
-                return;
-            }
-            
-            displaySubmissions();
-            document.getElementById('pin').value = '';
+            const selectedTeacher = teachers[teacherIndex];
+            displaySubmissions(selectedTeacher.name);
+            document.getElementById('teacherSelect').value = '';
         };
         
-        function displaySubmissions() {
+        function displaySubmissions(teacherName) {
             const listDiv = document.getElementById('tableContainer');
+            const exportSection = document.getElementById('exportSection');
             const today = new Date().toLocaleDateString();
+            
             const todaySubmissions = submissions.filter(s => {
                 const submissionDate = new Date(s.timestamp).toLocaleDateString();
-                return submissionDate === today;
+                return submissionDate === today && s.teacher === teacherName;
             });
             
+            currentSubmissions = todaySubmissions;
+            
             if (todaySubmissions.length === 0) {
-                listDiv.innerHTML = '<p>No submissions found for today.</p>';
+                listDiv.innerHTML = `<p>No submissions found for ${teacherName} today.</p>`;
+                exportSection.style.display = 'none';
                 return;
             }
             
-            let html = `<table><tr>
-                <th>Student</th><th>Grade</th><th>Teacher</th><th>Subject</th><th>Chapter</th><th>Work Done</th></tr>`;
+            let html = `<h3 style="margin-top:0; color: var(--main-red);">Submissions for ${teacherName}</h3>`;
+            html += `<table><tr>
+                <th>Student</th><th>Grade</th><th>Subject</th><th>Chapter</th><th>Work Done</th></tr>`;
             todaySubmissions.forEach(sub => {
                 html += `<tr>
                     <td>${sub.student}</td>
                     <td>${sub.grade}</td>
-                    <td>${sub.teacher}</td>
                     <td>${sub.subject}</td>
                     <td>${sub.chapter}</td>
                     <td>${sub.workDone}</td>
@@ -692,17 +740,116 @@
             });
             html += `</table>`;
             listDiv.innerHTML = html;
+            exportSection.style.display = 'block';
         }
         
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('active');
+        // ---------- SHARE / WHATSAPP EXPORT ----------
+        document.getElementById('exportWhatsAppBtn').onclick = async function() {
+            if (currentSubmissions.length === 0) {
+                alert('No submissions to export');
+                return;
             }
-        }
+            
+            const teacherName = currentSubmissions[0].teacher;
+            const today = new Date().toLocaleDateString();
+            
+            const exportWrapper = document.getElementById('exportCanvas');
+            exportWrapper.innerHTML = `
+                <div style="width: 800px; padding: 30px; background: white;">
+                    <h2 style="margin: 0 0 10px 0;">JOHNS ACADEMY - Daily Report</h2>
+                    <div class="report-header">
+                        <strong>Teacher:</strong> ${teacherName}<br>
+                        <strong>Date:</strong> ${today}<br>
+                        <strong>Total Students:</strong> ${currentSubmissions.length}
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                        <tr>
+                            <th style="background: red; color: white; border: 1px solid red; padding: 8px; text-align: left;">Student</th>
+                            <th style="background: red; color: white; border: 1px solid red; padding: 8px; text-align: left;">Grade</th>
+                            <th style="background: red; color: white; border: 1px solid red; padding: 8px; text-align: left;">Subject</th>
+                            <th style="background: red; color: white; border: 1px solid red; padding: 8px; text-align: left;">Chapter</th>
+                            <th style="background: red; color: white; border: 1px solid red; padding: 8px; text-align: left;">Work Done</th>
+                        </tr>
+                        ${currentSubmissions.map(sub => `
+                            <tr>
+                                <td style="border: 1px solid red; padding: 8px; background: white;">${sub.student}</td>
+                                <td style="border: 1px solid red; padding: 8px; background: white;">${sub.grade}</td>
+                                <td style="border: 1px solid red; padding: 8px; background: white;">${sub.subject}</td>
+                                <td style="border: 1px solid red; padding: 8px; background: white;">${sub.chapter}</td>
+                                <td style="border: 1px solid red; padding: 8px; background: white;">${sub.workDone}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                </div>
+            `;
+            
+            try {
+                const canvasElement = await html2canvas(exportWrapper.firstElementChild, {
+                    backgroundColor: '#ffffff',
+                    scale: 2
+                });
+                
+                canvasElement.toBlob(async function(blob) {
+                    if (!blob) {
+                        fallbackDownload(canvasElement);
+                        return;
+                    }
+                    
+                    const file = new File([blob], 'johns-academy-report.png', { type: blob.type || 'image/png' });
+                    
+                    // Prefer sharing file if supported
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        try {
+                            await navigator.share({
+                                files: [file],
+                                title: 'Johns Academy Daily Report',
+                                text: `Daily Report - ${teacherName} - ${today}`
+                            });
+                        } catch (err) {
+                            if (err.name !== 'AbortError') {
+                                fallbackDownload(canvasElement);
+                            }
+                        }
+                    } else if (navigator.share) {
+                        // Fallback: share only text
+                        try {
+                            await navigator.share({
+                                title: 'Johns Academy Daily Report',
+                                text: `Daily Report - ${teacherName} - ${today}`
+                            });
+                            // After this, user can manually send the downloaded image if needed
+                            fallbackDownload(canvasElement);
+                        } catch (err) {
+                            if (err.name !== 'AbortError') {
+                                fallbackDownload(canvasElement);
+                            }
+                        }
+                    } else {
+                        // No Web Share support, just download
+                        fallbackDownload(canvasElement);
+                    }
+                }, 'image/png');
+                
+            } catch (error) {
+                console.error('Error generating image:', error);
+                alert('Error generating image. Please try again.');
+            }
+        };
         
+        function fallbackDownload(canvas) {
+            const link = document.createElement('a');
+            link.download = 'johns-academy-report.png';
+            link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            alert('Image downloaded! You can now share it to WhatsApp from your gallery.');
+        }
+
+        // ---------- INITIAL LOAD ----------
+        updateTeacherSelect();
         updateGradeFilterDropdown();
         updateStudentGradeDropdown();
-        updateStudentDropdown();
     </script>
 </body>
 </html>
