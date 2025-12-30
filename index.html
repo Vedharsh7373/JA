@@ -957,7 +957,7 @@ document.getElementById('exportWhatsAppBtn').onclick = async function() {
 
 function fallbackDownload(canvas) {
   const link = document.createElement('a');
-  link.download = 'johns-academy-report.png';
+  link.download = 'johns-academy-daily-report.png';
   link.href = canvas.toDataURL('image/png');
   document.body.appendChild(link);
   link.click();
@@ -976,3 +976,4 @@ renderCalendar();
 <script async data-explicit-opt-in="true" data-cookie-opt-in="true" data-deployment-id="dpl_3XDUh4f9RuGJNZ47XFJ5KosEQJaQ" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
 </body>
 </html>
+
